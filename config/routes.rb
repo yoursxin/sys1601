@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  
+ #resources :pjmrs, :collection => {:delete_multiple => :post}
+ resources :pjmrs do
+  put :delete_multiple, on: :collection
+ end
   resources :users do
     member do
       get :following, :followers
@@ -7,7 +12,7 @@ Rails.application.routes.draw do
   resources :sessions, only:[:new, :create, :destroy]
   resources :microposts, only:[:create, :destroy]
   resources :relationships, only:[:create, :destroy]
-  resources :Pjmrs, only:[]
+  
 
   root to: 'pjmrs#index'
   match '/signup', to: 'users#new', via: 'get'  
@@ -15,7 +20,7 @@ Rails.application.routes.draw do
   match '/signout', to: 'sessions#destroy', via: 'delete'
   
   match '/help', to: 'static_pages#help', via: 'get'
-  match '/about', to: 'static_pages#about', via: 'get'
+  match '/about', to: 'statmeiic_pages#about', via: 'get'
   match '/contact', to: 'static_pages#contact', via: 'get'
 
   # The priority is based upon order of creation: first created -> highest priority.
