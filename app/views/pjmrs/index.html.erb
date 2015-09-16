@@ -1,6 +1,6 @@
 <h1>票据买入列表</h1>
 
-<% form_tag delete_multiple_pjmrs_path  do %>
+<%=form_tag delete_multiple_pjmrs_path, :method => :delete do %>
 
 <%= will_paginate %>
 
@@ -33,6 +33,6 @@
 	<% end %>
 </table>
 <%= will_paginate %>
-
+<%= submit_tag "删除"%>
 
 <% end %>

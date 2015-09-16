@@ -5,8 +5,11 @@ class PjmrsController < ApplicationController
 	end
 
 	def delete_multiple 
-		@pjmrs = Pjmr.paginate(page: params[:page])
-		Pjmr.find(params[pjmr_ids[]]).destroy
+		
+		Pjmr.find(params[:pjmr_ids]).each  do |pjmr|
+			pjmr.destroy
+
+		end
 		flash[:success] ="删除成功"
 		redirect_to pjmrs_url
 	end 

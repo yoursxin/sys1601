@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   
  #resources :pjmrs, :collection => {:delete_multiple => :post}
  resources :pjmrs do
-  put :delete_multiple, on: :collection
+  delete :delete_multiple, on: :collection
  end
   resources :users do
     member do
