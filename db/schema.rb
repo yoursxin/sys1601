@@ -28,13 +28,13 @@ ActiveRecord::Schema.define(version: 20150915033421) do
     t.string   "pjlx"
     t.string   "pch"
     t.decimal  "pmje",       precision: 16, scale: 2
-    t.string   "zrrq"
-    t.string   "cprq"
+    t.date     "zrrq"
+    t.date     "cprq"
     t.string   "pmdqrq"
     t.integer  "jjrjt"
     t.integer  "ydjt"
     t.integer  "jxts"
-    t.string   "jxdqrq"
+    t.date     "jxdqrq"
     t.decimal  "zrll",       precision: 12, scale: 6
     t.decimal  "zrlx",       precision: 16, scale: 2
     t.decimal  "sfje",       precision: 16, scale: 2
@@ -47,6 +47,13 @@ ActiveRecord::Schema.define(version: 20150915033421) do
     t.text     "bz"
     t.string   "khjlmc"
     t.string   "dabh"
+    t.string   "kczt"
+    t.date     "rkrq"
+    t.date     "ckrq"
+    t.string   "lrr"
+    t.datetime "lrsj"
+    t.string   "shr"
+    t.datetime "shsj"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
