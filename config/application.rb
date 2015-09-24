@@ -30,6 +30,9 @@ module SampleApp
     # config.i18n.default_locale = :de
     config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
 
+    config.time_zone = 'Beijing'
+    config.active_record.default_timezone = :Beijing
+
     
     WillPaginate.per_page = 15
   end
