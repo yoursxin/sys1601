@@ -27,6 +27,6 @@ class PjmrsController < ApplicationController
 	def import
 		Pjmr.import(params[:file])
 		redirect_to root_url, notice: "导入成功"
-
 	end 
+	
 end

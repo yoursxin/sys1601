@@ -5,11 +5,12 @@ class Pjmr < ActiveRecord::Base
 
 
 	def self.import(file)
-		colnmHash = Hash["票号","ph","出票人","cpr","承兑人","cdr","承兑行行号","cdrkhh","汇票金额","pmje","出票日","cprq","票据到期日","pmdqrq","起息日","qxrq","利率%","zrll","天数","jxts","到期日","jxdqrq"]
+		colnmHash = Hash["票号","ph","出票人","cpr","承兑人","cdr","承兑行行号","cdrkhh","汇票金额" \
+			,"pmje","出票日","cprq","票据到期日","pmdqrq","起息日","qxrq","利率%","zrll","天数","jxts","到期日","jxdqrq"]
 		spreadsheet = open_spreadsheet(file)
 		header = spreadsheet.row(1)
 		
-		Pjmr.transaction do
+		Pjmr.transaction do   #使用事务
 		  (2..spreadsheet.last_row).each do |i|			
 			  row = Hash[[header, spreadsheet.row(i)].transpose].slice(*colnmHash.keys)
 			

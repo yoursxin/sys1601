@@ -25,6 +25,7 @@
 			<th>贴现类型</th>
 			<th>票据类型</th>
 			<th>批次号</th>
+			<th>库存状态</th>	
 			<th>票面金额</th>
 			<th>转入日期</th>
 			<th>出票日期</th>
@@ -45,7 +46,7 @@
 			<th>承兑人</th>
 			<th>承兑人开户行</th>			
 			<th>客户经理</th>
-			<th>档案编号</th>	
+			<th>档案编号</th>			
 			<th>备注</th>		
 		</tr>
 	</thead>
@@ -56,6 +57,7 @@
 			<td><%=pjmr.txlx%></td>
 			<td><%=pjmr.pjlx%></td>
 			<td><%=pjmr.pch%></td>
+			<td><%=get_kcztdesc(pjmr.kczt)%>
 			<td><%=number_to_currency(pjmr.pmje, unit:'')%></td>
 			<td><%=pjmr.zrrq%></td>
 			<td><%=pjmr.cprq%></td>
@@ -76,7 +78,7 @@
 			<td><%=pjmr.cdr%></td>
 			<td><%=pjmr.cdrkhh%></td>
 			<td><%=pjmr.khjlmc%></td>
-			<td><%=pjmr.dabh%></td>
+			<td><%=pjmr.dabh%></td>			
 			<td><%=pjmr.bz%></td>
 		</tr>
 	<% end %>
