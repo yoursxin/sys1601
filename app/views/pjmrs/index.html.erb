@@ -1,90 +1,17 @@
 <h3>票据买入列表</h3>
 <%=form_tag pjmrs_path, method: :get, class: 'form-horizotal' do%>
-  <div class="control-group">
-    <label class="control-label" for="f_ph">票号</label>
-    <div class="controls">
-      <%=text_field_tag 'f_ph',params["f_ph"]%>
-    </div>
-    <label class="control-label" for="f_pch">批次号</label>
-    <div class="controls">
-      <%=text_field_tag 'f_pch',params["f_pch"]%>
-    </div>
-  </div>		
+<%=render partial: 'pjmrFindCons'%>	
 <%=submit_tag "查询", class: "btn btn-large btn-primary" %>
 
 <% end %>
 <hr>
-<%=form_tag delete_multiple_pjmrs_path, :method => :delete do %>
+<%=form_tag delete_multiple_pjmrs_path, method: :delete,name: 'pjmrListForm' do %>
 
+<%=render partial: 'pjmrList', object: @pjmrs%>
 
-<table class='table table-striped table-bordered table-hover table-condensed' style='width:2500px'>
-	<thead>
-	<tr>
-			<th>&nbsp;&nbsp;&nbsp;</th>
-			<th>票号</th>
-			<th>贴现类型</th>
-			<th>票据类型</th>
-			<th>批次号</th>
-			<th>库存状态</th>	
-			<th>票面金额</th>
-			<th>转入日期</th>
-			<th>出票日期</th>
-			<th>票面到期日</th>
-			<th>节假日加天</th>
-			<th>异地加天</th>
-			<th>计息天数</th>
-			<th>起息日</th>
-			<th>计息到期日</th>
-			<th>转入利率</th>
-			<th>转入利息</th>
-			<th>实付金额</th>
-			<th>客户名称</th>
-			<th>出票人</th>
-			<th>出票人开户行</th>
-			<th>收款人</th>
-			<th>收款人开户行</th>
-			<th>承兑人</th>
-			<th>承兑人开户行</th>			
-			<th>客户经理</th>
-			<th>档案编号</th>			
-			<th>备注</th>		
-		</tr>
-	</thead>
-	<% @pjmrs.each do |pjmr|%>
-		<tr>
-			<td><%=check_box_tag "pjmr_ids[]", pjmr.id%></td>
-			<td><%=pjmr.ph%></td>
-			<td><%=pjmr.txlx%></td>
-			<td><%=pjmr.pjlx%></td>
-			<td><%=pjmr.pch%></td>
-			<td><%=get_kcztdesc(pjmr.kczt)%>
-			<td><%=number_to_currency(pjmr.pmje, unit:'')%></td>
-			<td><%=pjmr.zrrq%></td>
-			<td><%=pjmr.cprq%></td>
-			<td><%=pjmr.pmdqrq%></td>
-			<td><%=pjmr.jjrjt%></td>
-			<td><%=pjmr.ydjt%></td>
-			<td><%=pjmr.jxts%></td>
-			<td><%=pjmr.qxrq%></td>
-			<td><%=pjmr.jxdqrq%></td>
-			<td><%=pjmr.zrll%></td>
-			<td><%=pjmr.zrlx%></td>
-			<td><%=pjmr.sfje%></td>
-			<td><%=pjmr.khmc%></td>
-			<td><%=pjmr.cpr%></td>
-			<td><%=pjmr.cprkhh%></td>
-			<td><%=pjmr.skr%></td>
-			<td><%=pjmr.skrkhh%></td>
-			<td><%=pjmr.cdr%></td>
-			<td><%=pjmr.cdrkhh%></td>
-			<td><%=pjmr.khjlmc%></td>
-			<td><%=pjmr.dabh%></td>			
-			<td><%=pjmr.bz%></td>
-		</tr>
-	<% end %>
-</table>
 <%= will_paginate %>
 <%= submit_tag "删除", data: {confirm: "确认删除吗？"}%>
+<%= button_to '入库申请',{class: 'btn btn-large btn-primary' }, form_class: 'pjmrListForm'%>
 <% end %>
 
 <%=form_tag import_pjmrs_path, multipart: true do%>

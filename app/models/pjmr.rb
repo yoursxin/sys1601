@@ -32,4 +32,14 @@ class Pjmr < ActiveRecord::Base
 		else raise "未知的文件类型: #{file.original_filename}"
 		end
 	end
+
+	def self.instockReq( ids)
+		Pjmr.transaction do
+			ids.each do |id|
+				pjmr = Pjmr.find(id)
+				pjmr.kczt = '1'
+				pjmr.save!
+			end
+		end
+	end
 end

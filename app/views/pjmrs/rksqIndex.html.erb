@@ -1,0 +1,15 @@
+<h3>票据录入列表</h3>
+<%=form_tag pjmrs_path, method: :get, class: 'form-horizotal' do%>
+<%=render partial: 'pjmrFindCons'%>	
+<%=submit_tag "查询", class: "btn btn-large btn-primary" %>
+
+<% end %>
+<hr>
+<%=form_tag instockReq_pjmrs_path, method: :put do %>
+
+<%=render partial: 'pjmrList', object: @pjmrs%>
+
+<%= will_paginate %>
+<%= submit_tag "入库申请", data: {confirm: "确认进行入库申请吗？"}%>
+<% end %>
+
