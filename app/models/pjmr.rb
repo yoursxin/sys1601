@@ -33,13 +33,32 @@ class Pjmr < ActiveRecord::Base
 		end
 	end
 
-	def self.instockReq( ids)
+	#批量入库申请
+	def self.plrksq( ids, usid)
 		Pjmr.transaction do
 			ids.each do |id|
 				pjmr = Pjmr.find(id)
 				pjmr.kczt = '1'
+				pjmr.rksqr = usid
+				pjmr.rksqsj = Time.now
 				pjmr.save!
 			end
 		end
 	end
+
+	#批量入库审核
+	def self.plrksh( ids, usid)
+		Pjmr.transaction do
+			ids.each do |id|
+				pjmr = Pjmr.find(id)
+				pjmr.kczt = '2'
+				pjmr.rkshr = usid
+				pjmr.rkshsj = Time.now
+				pjmr.rkrq = Date.today
+				pjmr.save!
+			end
+		end
+	end
+
+	
 end

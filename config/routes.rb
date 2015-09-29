@@ -4,8 +4,11 @@ Rails.application.routes.draw do
  resources :pjmrs do
   delete :delete_multiple, on: :collection
   post :import, on: :collection
-  put :instockReq, on: :collection
+  put :rksq, on: :collection
   get :rksqIndex, on: :collection
+  get :rkdshIndex, on: :collection
+  put :rksh, on: :collection
+  get :rkIndex, on: :collection  
  end
   resources :users do
     member do

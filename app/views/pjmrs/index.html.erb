@@ -1,4 +1,4 @@
-<h3>票据买入列表</h3>
+<h4>票据买入查询</h4>
 <%=form_tag pjmrs_path, method: :get, class: 'form-horizotal' do%>
 <%=render partial: 'pjmrFindCons'%>	
 <%=submit_tag "查询", class: "btn btn-large btn-primary" %>
@@ -11,9 +11,9 @@
 
 <%= will_paginate %>
 <%= submit_tag "删除", data: {confirm: "确认删除吗？"}%>
-<%= button_to '入库申请',{class: 'btn btn-large btn-primary' }, form_class: 'pjmrListForm'%>
 <% end %>
 
+<h4>批量导入</h4>
 <%=form_tag import_pjmrs_path, multipart: true do%>
   <%=file_field_tag :file%>
   <%=submit_tag "导入"%>

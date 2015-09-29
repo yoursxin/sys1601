@@ -13,10 +13,10 @@ module ApplicationHelper
 		when "0" then "录入"
 		when "1" then "入库待审核"
 		when "2" then "入库"
-		when "3" then "入库退回"
-		when "3" then "出库待审核"
-		when "4" then "出库退回"
+		when "3" then "入库审核退回"
+		when "4" then "出库待审核"
 		when "5" then "出库"
+		when "6" then "出库审核退回"
 		else "未知"
 		end
 	end

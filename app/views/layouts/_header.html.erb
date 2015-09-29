@@ -24,6 +24,36 @@
         <% else %>
           <li><%= link_to "Sign in", signin_path %></li>
         <% end %>
+
+         <li id="fat-menu" class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                票据管理
+              </a>
+              <ul class="dropdown-menu">
+                <li><%= link_to "录入管理", pjmrs_path %></li>
+                <li><%= link_to "入库申请", rksqIndex_pjmrs_path %></li>
+                <li><%= link_to "入库审核", rkdshIndex_pjmrs_path %></li>
+                <li><%= link_to "出库申请", rkIndex_pjmrs_path %></li>
+                <li><%= link_to "出库审核", rksqIndex_pjmrs_path %></li>
+                <li class="divider"></li>
+                <li><%= link_to "票据查询", rksqIndex_pjmrs_path %></li> 
+              </ul>
+            </li>
+
+            <li id="fat-menu" class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                资金管理
+              </a>
+              <ul class="dropdown-menu">
+                <li><%= link_to "录入管理", pjmrs_path %></li>
+                <li><%= link_to "入金申请", rksqIndex_pjmrs_path %></li>
+                <li><%= link_to "入金审核", rksqIndex_pjmrs_path %></li>
+                <li><%= link_to "出金申请", rksqIndex_pjmrs_path %></li>
+                <li><%= link_to "出金审核", rksqIndex_pjmrs_path %></li>
+                <li class="divider"></li>
+                <li><%= link_to "资金查询", rksqIndex_pjmrs_path %></li> 
+              </ul>
+            </li>
         </ul>
       </nav>
     </div>

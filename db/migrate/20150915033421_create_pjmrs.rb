@@ -28,12 +28,13 @@ class CreatePjmrs < ActiveRecord::Migration
       t.string :khjlmc
       t.string :dabh
       t.string :kczt
-      t.date :rkrq
-      t.date :ckrq
+      t.date :rkrq      
       t.string :lrr
       t.datetime :lrsj
-      t.string :shr
-      t.datetime :shsj
+      t.string :rksqr
+      t.datetime :rksqsj
+      t.string :rkshr
+      t.datetime :rkshsj     
 
       t.timestamps
     end

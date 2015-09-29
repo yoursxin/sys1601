@@ -1,33 +1,60 @@
 class PjmrsController < ApplicationController
 
-	def index
-		#根据输入生成查询条件
-		wh={}		
-		params.keys.each do |key|
-			val = params[key]
-			wh[key[2,key.length-1]] = val if !val.blank? && key.index("f_")==0
-		end
-		logger.debug "wh: "+wh.to_s
+	#录入清单
+	def index		
+		wh=genFindCon params
+		wh['kczt'] = "0"  #录入状态		
 		@pjmrs = Pjmr.where(wh).paginate(page: params[:page])
 	end
 
-	def rksqIndex
-		#根据输入生成查询条件
-		wh={}		
-		params.keys.each do |key|
-			val = params[key]
-			wh[key[2,key.length-1]] = val if !val.blank? && key.index("f_")==0
-		end
-
-		wh['kczt'] = "0"
-		logger.debug "wh: "+wh.to_s
+	#根据录入清单，进行入库申请
+	def rksqIndex		
+		wh=genFindCon params
+		wh['kczt'] = "0"  #录入状态		
 		@pjmrs = Pjmr.where(wh).paginate(page: params[:page])
 	end
 
-	def delete_multiple 
-				
+	#入库申请
+	def rksq
+		logger.debug "current_user:"+current_user.to_s		
+		Pjmr.plrksq(params[:pjmr_ids], current_user.name)
+		flash[:success] = "入库申请成功"
+		redirect_to rksqIndex_pjmrs_url
+	end
+
+	#入库待审核清单，进行入库
+	def rkdshIndex		
+		wh=genFindCon params
+		wh['kczt'] = "1"  #入库待审核		
+		@pjmrs = Pjmr.where(wh).paginate(page: params[:page])
+	end
+	
+	#入库审核
+	def rksh		
+		Pjmr.plrksh(params[:pjmr_ids], current_user.name)
+		flash[:success] = "入库成功"
+		redirect_to rkdshIndex_pjmrs_url
+	end
+
+
+	#入库清单，进行出库申请
+	def rkIndex		
+		wh=genFindCon params
+		wh['kczt'] = "2"  #入库		
+		@pjmrs = Pjmr.where(wh).paginate(page: params[:page])
+	end
+
+	#出库待审核清单，进行出库
+	def ckdshIndex		
+		wh=genFindCon params
+		wh['kczt'] = "4"  #出库待审核		
+		@pjmrs = Pjmr.where(wh).paginate(page: params[:page])
+	end
+
+	def delete_multiple 				
 		Pjmr.transacton do
 		  Pjmr.find(params[:pjmr_ids]).each  do |pjmr|
+		  	  rails '非录入或审核退回状态，不能进行删除' if pjmr.kczt !='0' || pjmr.kczt !='3' 
 			  pjmr.destroy
 		  end
 		end
@@ -40,15 +67,21 @@ class PjmrsController < ApplicationController
 		redirect_to pjmrs_url
 	end
 
-	def instockReq
-		Pjmr.instockReq(params[:pjmr_ids])
-		flash[:success] = "入库申请成功"
-		redirect_to rksqIndex_pjmrs_url
-	end
+	
 
 	def import
 		Pjmr.import(params[:file])
 		redirect_to root_url, notice: "导入成功"
+	end 
+
+	def genFindCon(params)
+		wh={}		
+		params.keys.each do |key|
+			val = params[key]
+			wh[key[2,key.length-1]] = val if !val.blank? && key.index("f_")==0
+		end
+		logger.debug "wh: "+wh.to_s
+		wh
 	end 
 
 	

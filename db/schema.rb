@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150915033421) do
+ActiveRecord::Schema.define(version: 20150929060418) do
 
   create_table "microposts", force: true do |t|
     t.string   "content"
@@ -21,6 +21,30 @@ ActiveRecord::Schema.define(version: 20150915033421) do
   end
 
   add_index "microposts", ["user_id", "created_at"], name: "index_microposts_on_user_id_and_created_at"
+
+  create_table "pjmcs", force: true do |t|
+    t.string   "ph"
+    t.string   "pch"
+    t.string   "khmc"
+    t.string   "zmrq"
+    t.string   "txlx"
+    t.integer  "jjrjt"
+    t.integer  "ydjt"
+    t.integer  "jxts"
+    t.date     "jxdqrq"
+    t.decimal  "zcll",       precision: 12, scale: 6
+    t.decimal  "zclx",       precision: 16, scale: 2
+    t.decimal  "ssje",       precision: 16, scale: 2
+    t.string   "khjlmc"
+    t.string   "dabh"
+    t.string   "cksqr"
+    t.datetime "cksqsj"
+    t.string   "ckshr"
+    t.datetime "ckshsj"
+    t.integer  "pjmr_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "pjmrs", force: true do |t|
     t.string   "ph"
@@ -51,11 +75,12 @@ ActiveRecord::Schema.define(version: 20150915033421) do
     t.string   "dabh"
     t.string   "kczt"
     t.date     "rkrq"
-    t.date     "ckrq"
     t.string   "lrr"
     t.datetime "lrsj"
-    t.string   "shr"
-    t.datetime "shsj"
+    t.string   "rksqr"
+    t.datetime "rksqsj"
+    t.string   "rkshr"
+    t.datetime "rkshsj"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
