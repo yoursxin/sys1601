@@ -1,5 +1,6 @@
 class Pjmr < ActiveRecord::Base
 
+	has_one :pjmcs
 	validates :ph, presence: true
 	
 
@@ -60,5 +61,28 @@ class Pjmr < ActiveRecord::Base
 		end
 	end
 
-	
+	#批量入库申请退回
+	def self.plrksqth( ids, usid)
+		Pjmr.transaction do
+			ids.each do |id|
+				pjmr = Pjmr.find(id)
+				pjmr.kczt = '3'
+				pjmr.rkshr = usid
+				pjmr.rkshsj = Time.now
+				pjmr.rkrq = Date.today
+				pjmr.save!
+			end
+		end
+	end
+
+	#批量录入删除
+	def self.pllrdel (ids)			
+		Pjmr.transaction do
+		  Pjmr.find(ids).each  do |pjmr|
+		  	  raise '只有录入或入库申请退回状态才能进行删除' if pjmr.kczt !='0' && pjmr.kczt !='3' 
+			  pjmr.destroy
+		  end
+		end	
+	end
+
 end

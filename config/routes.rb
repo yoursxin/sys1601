@@ -1,14 +1,13 @@
 Rails.application.routes.draw do
   
  #resources :pjmrs, :collection => {:delete_multiple => :post}
- resources :pjmrs do
-  delete :delete_multiple, on: :collection
+ resources :pjmrs do  
   post :import, on: :collection
-  put :rksq, on: :collection
-  get :rksqIndex, on: :collection
+  put :rksq, on: :collection  
   get :rkdshIndex, on: :collection
   put :rksh, on: :collection
-  get :rkIndex, on: :collection  
+  get :rkIndex, on: :collection 
+  put :cksq, on: :collection 
  end
   resources :users do
     member do

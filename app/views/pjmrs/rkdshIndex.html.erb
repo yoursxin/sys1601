@@ -1,11 +1,12 @@
 <h4>待入库审核票据查询</h4>
-<%=form_tag rkdshIndex_pjmrs_path, method: :get, class: 'form-horizotal' do%>
+<%=form_tag rkdshIndex_pjmrs_path, method: :get, class: 'form-horizotal', name: 'rkdshIndexForm' do%>
 <%=render partial: 'pjmrFindCons'%>
-<%=submit_tag "查询", class: "btn btn-large btn-primary" %>
+<%=submit_tag "查询", class: "btn btn-default" %>
 <% end %>
 <hr>
 <%=will_paginate%>
 <%=form_tag rksh_pjmrs_path, method: :put do%>
 <%=render partial: 'pjmrList', object: @pjmrs %>
-<%=submit_tag "入库审核通过", class: "btn btn-large btn-primary",data: {confirm: "确认进行入库审核通过吗？"}%>
+<%=submit_tag "入库审核通过", class: "btn  btn-primary",data: {confirm: "确认进行入库审核通过吗？"}, name: 'rksh_btn'%>
+<%=submit_tag "入库申请退回", class: "btn btn-danger",data: {confirm: "确认进行入库审核退回吗？"}	, name: 'rksqth_btn'%>
 <% end %>

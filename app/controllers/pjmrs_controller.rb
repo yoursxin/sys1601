@@ -3,7 +3,7 @@ class PjmrsController < ApplicationController
 	#录入清单
 	def index		
 		wh=genFindCon params
-		wh['kczt'] = "0"  #录入状态		
+		wh['kczt'] = ["0","3"]  #录入状态		
 		@pjmrs = Pjmr.where(wh).paginate(page: params[:page])
 	end
 
@@ -12,14 +12,6 @@ class PjmrsController < ApplicationController
 		wh=genFindCon params
 		wh['kczt'] = "0"  #录入状态		
 		@pjmrs = Pjmr.where(wh).paginate(page: params[:page])
-	end
-
-	#入库申请
-	def rksq
-		logger.debug "current_user:"+current_user.to_s		
-		Pjmr.plrksq(params[:pjmr_ids], current_user.name)
-		flash[:success] = "入库申请成功"
-		redirect_to rksqIndex_pjmrs_url
 	end
 
 	#入库待审核清单，进行入库
@@ -31,8 +23,14 @@ class PjmrsController < ApplicationController
 	
 	#入库审核
 	def rksh		
-		Pjmr.plrksh(params[:pjmr_ids], current_user.name)
-		flash[:success] = "入库成功"
+		if params[:rksh_btn]
+			Pjmr.plrksh(params[:pjmr_ids], current_user.name)
+			flash[:success] = "入库成功"
+		elsif params[:rksqth_btn]	
+			Pjmr.plrksqth(params[:pjmr_ids], current_user.name)
+			flash[:success] = "入库申请退回成功"
+		end	
+
 		redirect_to rkdshIndex_pjmrs_url
 	end
 
@@ -51,16 +49,16 @@ class PjmrsController < ApplicationController
 		@pjmrs = Pjmr.where(wh).paginate(page: params[:page])
 	end
 
-	def delete_multiple 				
-		Pjmr.transacton do
-		  Pjmr.find(params[:pjmr_ids]).each  do |pjmr|
-		  	  rails '非录入或审核退回状态，不能进行删除' if pjmr.kczt !='0' || pjmr.kczt !='3' 
-			  pjmr.destroy
-		  end
-		end
-		flash[:success] ="删除成功"
+	#入库申请
+	def rksq 		
+		if params[:del_btn]			
+			Pjmr.pllrdel params[:pjmr_ids]
+			flash[:success] ="删除成功"
+		elsif params[:rksq_btn]
+			Pjmr.plrksq(params[:pjmr_ids], current_user.name)
+			flash[:success] = "入库申请成功"
+		end			
 		redirect_to pjmrs_url
-
 	rescue ActiveRecord::RecordNotFound
 		logger.error "查找票据失败"+$!.to_s
 		flash[:error] = "未选择或选择的票据不存在"
