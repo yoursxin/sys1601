@@ -8,6 +8,11 @@ Rails.application.routes.draw do
   put :rksh, on: :collection
   get :rkIndex, on: :collection 
   put :cksq, on: :collection 
+  post :ckpledit, on: :collection
+  put :ckplsq, on: :collection
+ end
+ resources :pjmcs do
+
  end
   resources :users do
     member do

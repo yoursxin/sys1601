@@ -63,9 +63,7 @@ class PjmrsController < ApplicationController
 		logger.error "查找票据失败"+$!.to_s
 		flash[:error] = "未选择或选择的票据不存在"
 		redirect_to pjmrs_url
-	end
-
-	
+	end	
 
 	def import
 		Pjmr.import(params[:file])
@@ -81,6 +79,27 @@ class PjmrsController < ApplicationController
 		logger.debug "wh: "+wh.to_s
 		wh
 	end 
+
+	#出库批量编辑
+	def ckpledit
+		@pjmrs = Pjmr.find(params[:pjmr_ids])
+	end
+
+ 	def ckplsq
+ 		if params[:pjmr_ids].blank?
+ 			flash[:error] = "未选择或选择的票据不存在"
+ 			redirect_to rkIndex_pjmrs_path
+ 		else
+ 			Pjmr.transaction do
+ 				params[:pjmr_ids].each do |id|
+
+ 					
+ 				end
+ 			end
+
+ 		end
+
+ 	end
 
 	
 end

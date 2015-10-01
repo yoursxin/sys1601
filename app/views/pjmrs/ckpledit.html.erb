@@ -1,0 +1,11 @@
+
+<%= form_for :pjmc, :url => ckplsq_pjmrs_path, :html => {:method => :post} do |f| %>
+
+	<% @pjmrs.each do |pjmr| %>
+		<%=hidden_field_tag "pjmr_ids[]", pjmr.id %>
+	<% end %>
+	<%=f.label :pch,"批次号" %><br/>
+	<%=f.text_field  :pch %>
+
+
+<% end %>

@@ -1,11 +1,11 @@
 <h4>入库票据查询</h4>
-<%=form_tag rkdshIndex_pjmrs_path, method: :get, class: 'form-horizotal', name: 'rkdshIndexForm' do%>
+<%=form_tag rkIndex_pjmrs_path, method: :get, class: 'form-horizotal', name: 'rkdshIndexForm' do%>
 <%=render partial: 'pjmrFindCons'%>
 <%=submit_tag "查询", class: "btn btn-default" %>
 <% end %>
 <hr>
 <%=will_paginate%>
-<%=form_tag cksq_pjmrs_path, method: :put do%>
+<%=form_tag ckpledit_pjmrs_path, method: :post do%>
 <%=render partial: 'pjmrList', object: @pjmrs %>
 <%=submit_tag "出库申请", class: "btn  btn-primary",data: {confirm: "确认进行出库申请吗？"}, name: 'cksq_btn'%>
 

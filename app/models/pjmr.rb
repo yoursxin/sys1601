@@ -1,6 +1,6 @@
 class Pjmr < ActiveRecord::Base
 
-	has_one :pjmcs
+	has_one :pjmc, :dependent => :destroy
 	validates :ph, presence: true
 	
 

@@ -1,0 +1,3 @@
+class PjmcsController < ApplicationController
+
+end
