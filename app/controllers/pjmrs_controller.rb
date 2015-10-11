@@ -92,14 +92,21 @@ class PjmrsController < ApplicationController
  		else
  			Pjmr.transaction do
  				params[:pjmr_ids].each do |id|
-
- 					
+ 					@pjmr = Pjmr.find(id)
+ 					@pjmr.kczt = '4'
+ 					@pjmr.create_pjmc(pjmc_params)
+ 					@pjmr.save! 
  				end
  			end
+ 			redirect_to rkIndex_pjmrs_path
 
  		end
 
  	end
+
+ 	def pjmc_params
+ 		params.require(:pjmc).permit(:ph, :pch)
+ 	end 
 
 	
 end
