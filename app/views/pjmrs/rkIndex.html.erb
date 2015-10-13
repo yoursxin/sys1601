@@ -8,5 +8,6 @@
 <%=form_tag ckpledit_pjmrs_path, method: :post do%>
 <%=render partial: 'pjmrList', object: @pjmrs %>
 <%=submit_tag "出库申请", class: "btn  btn-primary",data: {confirm: "确认进行出库申请吗？"}, name: 'cksq_btn'%>
+<%=submit_tag "申请撤销", class: "btn btn-danger", data: {confirm: "确认进行申请撤销吗？"}, name: 'cksqdel_btn'%>
 
 <% end %>

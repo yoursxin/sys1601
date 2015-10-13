@@ -2,10 +2,11 @@ class Pjmr < ActiveRecord::Base
 
 	has_one :pjmc, :dependent => :destroy
 	validates :ph, presence: true
+	accepts_nested_attributes_for  :pjmc
 	
 
 
-	def self.import(file)
+	def self.import(file,usid)
 		colnmHash = Hash["票号","ph","出票人","cpr","承兑人","cdr","承兑行行号","cdrkhh","汇票金额" \
 			,"pmje","出票日","cprq","票据到期日","pmdqrq","起息日","qxrq","利率%","zrll","天数","jxts","到期日","jxdqrq"]
 		spreadsheet = open_spreadsheet(file)
@@ -18,7 +19,7 @@ class Pjmr < ActiveRecord::Base
 			  #把key置换成列名			
 			  row.transform_keys! {|key| key = colnmHash[key]}
 			  pjmr = Pjmr.new
-			  pjmr.attributes = row.merge("kczt"=>"0","lrsj"=>Time.now)
+			  pjmr.attributes = row.merge("kczt"=>"0","lrsj"=>Time.now,"lrr"=>usid)
 			  pjmr.save!
 		  end
 	    end
@@ -61,6 +62,20 @@ class Pjmr < ActiveRecord::Base
 		end
 	end
 
+	#批量出库审核
+	def self.plcksh(ids, usid)
+		Pjmr.transaction do
+			ids.each do |id|
+				pjmr = Pjmr.find(id)
+				pjmr.kczt = '5'
+				pjmr.pjmc.ckshr = usid
+				pjmr.pjmc.ckshsj = Time.now
+				pjmr.pjmc.ckrq = Date.today
+				pjmr.save!
+			end
+		end
+	end
+
 	#批量入库申请退回
 	def self.plrksqth( ids, usid)
 		Pjmr.transaction do
@@ -75,6 +90,20 @@ class Pjmr < ActiveRecord::Base
 		end
 	end
 
+	#批量出库申请退回
+	def self.plcksqth(ids, usid) 
+		Pjmr.transaction do |id|
+			ids.each do |id|
+				pjmr = Pjmr.find(id)
+				pjmr.kczt = '6'
+				pjmr.pjmc.ckshr = usid
+				pjmr.pjmc.ckshsj = Time.now
+				pjmr.pjmc.ckrq = Date.today
+				pjmr.save!
+			end
+		end
+	end
+
 	#批量录入删除
 	def self.pllrdel (ids)			
 		Pjmr.transaction do
@@ -83,6 +112,18 @@ class Pjmr < ActiveRecord::Base
 			  pjmr.destroy
 		  end
 		end	
+	end
+
+	#批量出口申请删除
+	def self.plcksqdel (ids, usid)
+		Pjmr.transaction do
+			Pjmr.find(ids).each do |pjmr|
+				raise "只有出库申请退回状态才能进行删除"  if pjmr.kczt != '6' 
+				pjmr.kczt = '2'
+				pjmr.pjmc.destroy
+				pjmr.save!
+			end
+		end
 	end
 
 end

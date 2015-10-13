@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   
  #resources :pjmrs, :collection => {:delete_multiple => :post}
  resources :pjmrs do  
+  get :lrIndex, on: :collection
   post :import, on: :collection
   put :rksq, on: :collection  
   get :rkdshIndex, on: :collection
@@ -10,6 +11,8 @@ Rails.application.routes.draw do
   put :cksq, on: :collection 
   post :ckpledit, on: :collection
   put :ckplsq, on: :collection
+  get :ckdshIndex, on: :collection
+  put :cksh, on: :collection
  end
  resources :pjmcs do
 

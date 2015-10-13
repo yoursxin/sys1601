@@ -1,0 +1,12 @@
+<h4>出库待审核票据查询</h4>
+<%=form_tag ckdshIndex_pjmrs_path, method: :get, class: 'form-horizotal', name: 'ckdshIndexForm' do%>
+<%=render partial: 'pjmrFindCons'%>
+<%=submit_tag "查询", class: "btn btn-default" %>
+<% end %>
+<hr>
+<%=will_paginate%>
+<%=form_tag cksh_pjmrs_path, method: :put do%>
+<%=render partial: 'pjmrList', object: @pjmrs %>
+<%=submit_tag "出库审核通过", class: "btn  btn-primary",data: {confirm: "确认进行出库审核通过吗？"}, name: 'cksh_btn'%>
+<%=submit_tag "出库申请退回", class: "btn btn-danger",data: {confirm: "确认进行出库审核退回吗？"}	, name: 'cksqth_btn'%>
+<% end %>

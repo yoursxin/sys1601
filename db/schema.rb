@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 20150929060418) do
     t.string   "dabh"
     t.string   "cksqr"
     t.datetime "cksqsj"
+    t.date     "ckrq"
     t.string   "ckshr"
     t.datetime "ckshsj"
     t.integer  "pjmr_id"

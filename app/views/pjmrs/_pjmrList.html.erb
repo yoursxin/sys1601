@@ -28,7 +28,8 @@
 			<th>承兑人开户行</th>			
 			<th>客户经理</th>
 			<th>档案编号</th>			
-			<th>备注</th>		
+			<th>备注</th>
+			<th>卖出批次号</th>		
 		</tr>
 	</thead>
 	<% @pjmrs.each do |pjmr|%>
@@ -61,6 +62,7 @@
 			<td><%=pjmr.khjlmc%></td>
 			<td><%=pjmr.dabh%></td>			
 			<td><%=pjmr.bz%></td>
+			<td><%=pjmr.pjmc.pch if pjmr.pjmc != nil %></td>
 		</tr>
 	<% end %>
 </table>
