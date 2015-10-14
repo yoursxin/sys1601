@@ -8,7 +8,10 @@ class Pjmr < ActiveRecord::Base
 
 	def self.import(file,usid)
 		colnmHash = Hash["票号","ph","出票人","cpr","承兑人","cdr","承兑行行号","cdrkhh","汇票金额" \
-			,"pmje","出票日","cprq","票据到期日","pmdqrq","起息日","qxrq","利率%","zrll","天数","jxts","到期日","jxdqrq"]
+			,"pmje","出票日","cprq","票据到期日","pmdqrq","起息日","qxrq","利率%","zrll","天数","jxts","到期日","jxdqrq" \
+			,"pch","批次号","txlx","贴现类型", "pjlx","票据类型","jjrjt","节假日加天","ydjt","异地加天"\
+			,"zrlx","转入利息", "sfje","实付金额","khmc","客户名称","cprkhh","出票人开户行","skr","收款人" \
+			,"skrkhh","收款人开户行","khjlmc","客户经理","dabh","档案编号","bz","备注"]
 		spreadsheet = open_spreadsheet(file)
 		header = spreadsheet.row(1)
 		
