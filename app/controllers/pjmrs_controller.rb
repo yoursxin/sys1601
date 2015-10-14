@@ -81,7 +81,7 @@ class PjmrsController < ApplicationController
 		wh={}		
 		params.keys.each do |key|
 			val = params[key]
-			wh[key[2,key.length-1]] = val if !val.blank? && key.index("f_")==0
+			wh[key[2,key.length-1]] = val if !val.blank? && key.index("f_")==0			
 		end
 		logger.debug "wh: "+wh.to_s
 		wh
