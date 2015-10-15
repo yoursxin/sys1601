@@ -1,4 +1,4 @@
-<table class='table table-striped table-bordered table-hover table-condensed' style='width:2500px'>
+<table class='table table-striped table-bordered table-hover table-condensed' style='width:3500px'>
 	<thead>
 	<tr>
 			<th>&nbsp;&nbsp;&nbsp;</th>
@@ -30,6 +30,16 @@
 			<th>档案编号</th>			
 			<th>备注</th>
 			<th>卖出批次号</th>		
+			<th>转出贴现客户</th>		
+			<th>转卖日期</th>	
+			<th>转卖类型</th>
+			<th>计息天数</th>
+			<th>计息到期日</th>
+			<th>转出利率</th>
+			<th>转出利息</th>
+			<th>实收金额</th>
+			<th>转卖客户经理</th>	
+			<th>转卖档案编号</th>	
 		</tr>
 	</thead>
 	<% @pjmrs.each do |pjmr|%>
@@ -63,6 +73,16 @@
 			<td><%=pjmr.dabh%></td>			
 			<td><%=pjmr.bz%></td>
 			<td><%=pjmr.pjmc.pch if pjmr.pjmc != nil %></td>
+			<td><%=pjmr.pjmc.khmc if pjmr.pjmc != nil %></td>
+			<td><%=pjmr.pjmc.zmrq if pjmr.pjmc != nil %></td>
+			<td><%=pjmr.pjmc.txlx if pjmr.pjmc != nil %></td>
+			<td><%=pjmr.pjmc.jxts if pjmr.pjmc != nil %></td>
+			<td><%=pjmr.pjmc.jxdqrq if pjmr.pjmc != nil %></td>
+			<td><%=pjmr.pjmc.zcll if pjmr.pjmc != nil %></td>
+			<td><%=pjmr.pjmc.zclx if pjmr.pjmc != nil %></td>
+			<td><%=pjmr.pjmc.ssje if pjmr.pjmc != nil %></td>
+			<td><%=pjmr.pjmc.khjlmc if pjmr.pjmc != nil %></td>
+			<td><%=pjmr.pjmc.dabh if pjmr.pjmc != nil %></td>
 		</tr>
 	<% end %>
 </table>

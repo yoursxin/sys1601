@@ -119,7 +119,8 @@ class PjmrsController < ApplicationController
  	end
 
  	def pjmc_params
- 		params.require(:pjmc).permit(:ph, :pch)
+ 		params.require(:pjmc).permit(:ph, :pch, :khmc, :zmrq, :txlx, :jjrjt, :ydjt, :jxts, :jxdqrq, :zcll\
+ 			, :zclx, :ssje, :khjlmc, :dabh)
  	end 
 
  	#出库审核
