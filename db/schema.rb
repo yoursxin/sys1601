@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150929060418) do
+ActiveRecord::Schema.define(version: 20151016023607) do
 
   create_table "microposts", force: true do |t|
     t.string   "content"
@@ -111,5 +111,36 @@ ActiveRecord::Schema.define(version: 20150929060418) do
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
   add_index "users", ["remember_token"], name: "index_users_on_remember_token"
+
+  create_table "zjtzs", force: true do |t|
+    t.string   "bh"
+    t.string   "zt"
+    t.string   "khmc"
+    t.string   "cpms"
+    t.decimal  "je",         precision: 16, scale: 2
+    t.string   "bz"
+    t.date     "csqxrq"
+    t.date     "csdqrq"
+    t.decimal  "csll",       precision: 12, scale: 6
+    t.integer  "csjxts"
+    t.decimal  "cslx",       precision: 16, scale: 2
+    t.string   "khjlmc"
+    t.string   "dabh"
+    t.string   "jqbh"
+    t.date     "qxrq"
+    t.date     "dqrq"
+    t.integer  "jxts"
+    t.decimal  "lx",         precision: 16, scale: 2
+    t.string   "rjsqr"
+    t.datetime "rjsqsj"
+    t.string   "rjshr"
+    t.datetime "rjshsj"
+    t.string   "cjsqr"
+    t.datetime "cjsqsj"
+    t.string   "cjshr"
+    t.datetime "cjshsj"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
 end

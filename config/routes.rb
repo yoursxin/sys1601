@@ -17,6 +17,10 @@ Rails.application.routes.draw do
  resources :pjmcs do
 
  end
+ resources :zjtzs do
+  get :lrIndex, on: :collection
+  put :rjsq, on: :collection
+ end
   resources :users do
     member do
       get :following, :followers
