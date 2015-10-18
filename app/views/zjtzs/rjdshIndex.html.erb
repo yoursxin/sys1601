@@ -1,0 +1,12 @@
+<h4>待入金审核记录查询</h4>
+<%=form_tag rjdshIndex_zjtzs_path, method: :get, class: 'form-horizotal', name: 'rjdshIndexForm' do%>
+<%=render partial: 'zjtzFindCons'%>
+<%=submit_tag "查询", class: "btn btn-default" %>
+<% end %>
+<hr>
+<%=will_paginate%>
+<%=form_tag rjsh_zjtzs_path, method: :put do%>
+<%=render partial: 'zjtzList', object: @zjtzs %>
+<%=submit_tag "入金审核通过", class: "btn  btn-primary",data: {confirm: "确认进行入金审核通过吗？"}, name: 'rjsh_btn'%>
+<%=submit_tag "入金申请退回", class: "btn btn-danger",data: {confirm: "确认进行入金审核退回吗？"}	, name: 'rjsqth_btn'%>
+<% end %>

@@ -20,4 +20,16 @@ module ApplicationHelper
 		else "未知"
 		end
 	end
+	def get_zjztdesc(kczt)
+		case kczt
+		when "0" then "录入"
+		when "1" then "入金待审核"
+		when "2" then "入金"
+		when "3" then "入金申请退回"
+		when "4" then "结清待审核"
+		when "5" then "结清"
+		when "6" then "结清申请退回"
+		else "未知"
+		end
+	end
 end

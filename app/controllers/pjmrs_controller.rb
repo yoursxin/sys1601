@@ -93,6 +93,7 @@ class PjmrsController < ApplicationController
 			@pjmrs = Pjmr.find(params[:pjmr_ids])
 		elsif params[:cksqdel_btn]
 			Pjmr.plcksqdel params[:pjmr_ids], current_user.name
+			flash[:sucess] = '出库申请删除成功'
 			redirect_to rkIndex_pjmrs_path
 		end			
 	end
@@ -110,7 +111,7 @@ class PjmrsController < ApplicationController
  					pjmr.create_pjmc(pjmc_params)
  					pjmr.pjmc.ph = pjmr.ph
  					pjmr.pjmc.cksqr= current_user.name
- 					pjmr.pjmc.cksqsj=Date.today					
+ 					pjmr.pjmc.cksqsj=Time.now				
  					pjmr.save!  
  				end
  			end

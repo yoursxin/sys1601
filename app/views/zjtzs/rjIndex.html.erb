@@ -1,0 +1,13 @@
+<h4>待结清资金查询</h4>
+<%=form_tag rjIndex_zjtzs_path, method: :get, class: 'form-horizotal', name: 'rjdshIndexForm' do%>
+<%=render partial: 'zjtzFindCons'%>
+<%=submit_tag "查询", class: "btn btn-default" %>
+<% end %>
+<hr>
+<%=will_paginate%>
+<%=form_tag cjpledit_zjtzs_path, method: :post do%>
+<%=render partial: 'zjtzList', object: @zjtzs %>
+<%=submit_tag "结清申请", class: "btn  btn-primary",data: {confirm: "确认进行结清申请吗？"}, name: 'cjsq_btn'%>
+<%=submit_tag "申请撤销", class: "btn btn-danger", data: {confirm: "确认进行申请撤销吗？"}, name: 'cjsqdel_btn'%>
+
+<% end %>

@@ -14,13 +14,24 @@ Rails.application.routes.draw do
   get :ckdshIndex, on: :collection
   put :cksh, on: :collection
  end
+
  resources :pjmcs do
 
  end
+
  resources :zjtzs do
   get :lrIndex, on: :collection
   put :rjsq, on: :collection
+  get :rjdshIndex, on: :collection  
+  put :rjsh, on: :collection
+  get :rjIndex, on: :collection 
+  put :cjsq, on: :collection 
+  post :cjpledit, on: :collection 
+  get :cjdshIndex, on: :collection
+  get :cjdshIndex, on: :collection
+  put :cjsh, on: :collection
  end
+
   resources :users do
     member do
       get :following, :followers

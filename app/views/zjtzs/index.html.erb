@@ -1,0 +1,15 @@
+<h4>资金查询</h4>
+<%=form_tag zjtzs_path, method: :get, class: 'form-horizotal' do%>
+<%=render partial: 'zjtzFindCons'%>	
+<%=submit_tag "查询", class: "btn  btn-default" %>
+
+<% end %>
+<hr>
+<%=form_tag rjsq_zjtzs_path, method: :put do %>
+<%= will_paginate %>
+<%=render partial: 'zjtzList', object: @zjtzs%>
+<%= will_paginate %>
+
+
+
+<% end %>

@@ -1,15 +1,17 @@
 <h4>资金录入管理</h4>
-<%=form_tag  lrsq_zjtzs_path, method: :put do%>
-<table>
-  <tr>
-    <th>&nbsp;</th>
-	<th>资金编号</th>
-  </tr>
-<%=@zjtzs.each do%>
-  <tr>
-  	
-  </tr>	
+<%=form_tag lrIndex_zjtzs_path, method: :get, class: 'form-horizotal' do%>
+<%=render partial: 'zjtzFindCons'%>	
+<%=submit_tag "查询", class: "btn  btn-default" %>
+
 <% end %>
-</table>
+<hr>
+<%=form_tag rjsq_zjtzs_path, method: :put do %>
+<%= will_paginate %>
+<%=render partial: 'zjtzList', object: @zjtzs%>
+<%= submit_tag "新建",  class: "btn btn-primary", name: 'lr_btn'%>
+<%= submit_tag "入金申请",  class: "btn btn-primary",data: {confirm: "确认进行入金申请吗？"}, name: 'rjsq_btn'%>
+<%= submit_tag "删除", class: "btn btn-danger", data: {confirm: "确认删除吗？"}, name: 'del_btn'%>
+
+
 
 <% end %>
