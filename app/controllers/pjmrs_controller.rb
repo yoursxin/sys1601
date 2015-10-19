@@ -4,6 +4,9 @@ class PjmrsController < ApplicationController
 		wh=genFindCon params
 		wh['lrr']=current_user.name			
 		@pjmrs = Pjmr.where(wh).order("updated_at desc").paginate(page: params[:page])
+		@zjye = Zjtz.where("zt in ('2','4')").sum(:je)
+		@pjye = Pjmr.where("kczt in ('2','4')").sum(:pmje)
+		logger.debug "========= zjje: "+@zjye.to_s+",pjye:"+@pjye.to_s
 	end
 
 	#录入清单
