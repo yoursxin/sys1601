@@ -2,6 +2,7 @@ class Pjmr < ActiveRecord::Base
 
 	has_one :pjmc, :dependent => :destroy
 	validates :ph, presence: true
+	validates :pmje, numericality: {greater_than_or_equal_to: 0}	 
 	accepts_nested_attributes_for  :pjmc
 	
 
