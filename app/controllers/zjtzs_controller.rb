@@ -1,13 +1,11 @@
 class ZjtzsController < ApplicationController
 
-
+	before_action :signed_in_user
 
 	def index
 		wh = genFindCon(params)
-		@zjtzs = Zjtz.where(wh).order("updated_at desc").paginate(page: params[:page])
-		@zjye = Zjtz.where("zt in ('2','4')").sum(:je)
-		@pjye = Pjmr.where("kczt in ('2','4')").sum(:pmje)
-		logger.debug "========= zjje: "+@zjye.to_s+",pjye:"+@pjye.to_s
+		@zjtzs = Zjtz.where(wh).order("updated_at desc").paginate(page: params[:page])		
+		
 		
 	end
 	#入金申请

@@ -15,7 +15,7 @@ class UsersController < ApplicationController
   def create
 	@user = User.new(user_params) # Not the final implementation!
 	if @user.save
-	  flash[:success] = "Welcome to the Sample App!"
+	  flash[:success] = "欢迎!"
 	  redirect_to @user
 	else
 	  render 'new'
@@ -25,7 +25,7 @@ class UsersController < ApplicationController
   end
   def update
     if @user.update_attributes(user_params)
-      flash[:success] = "Profile updated"
+      flash[:success] = "设置已更新"
       sign_in @user
       redirect_to @user
     else
@@ -34,7 +34,7 @@ class UsersController < ApplicationController
   end
   def destroy
     User.find(params[:id]).destroy
-    flash[:success] = "User destroyed."
+    flash[:success] = "用户已删除."
     redirect_to users_url
   end
   def following
@@ -52,7 +52,7 @@ class UsersController < ApplicationController
 
   private
   def user_params
-    params.require(:user).permit(:name, :email, :password,
+    params.require(:user).permit(:password,
     :password_confirmation)
   end
 

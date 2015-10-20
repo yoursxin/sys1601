@@ -32,4 +32,10 @@ module ApplicationHelper
 		else "未知"
 		end
 	end
+	def getZjye
+		Zjtz.where("zt in ('2','4')").sum(:je)
+	end
+	def getPjye
+		 Pjmr.where("kczt in ('2','4')").sum(:pmje)
+	end
 end

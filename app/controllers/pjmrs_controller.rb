@@ -1,12 +1,12 @@
 class PjmrsController < ApplicationController
 
+	before_action :signed_in_user
+	
 	def index		
 		wh=genFindCon params
 		wh['lrr']=current_user.name			
-		@pjmrs = Pjmr.where(wh).order("updated_at desc").paginate(page: params[:page])
-		@zjye = Zjtz.where("zt in ('2','4')").sum(:je)
-		@pjye = Pjmr.where("kczt in ('2','4')").sum(:pmje)
-		logger.debug "========= zjje: "+@zjye.to_s+",pjye:"+@pjye.to_s
+		@pjmrs = Pjmr.where(wh).where("cpr like ? ","%#{params['fl_cpr']}%").order("updated_at desc").paginate(page: params[:page])
+				
 	end
 
 	#录入清单
@@ -89,6 +89,8 @@ class PjmrsController < ApplicationController
 		logger.debug "wh: "+wh.to_s
 		wh
 	end 
+
+
 
 	#出库批量编辑
 	def ckpledit
