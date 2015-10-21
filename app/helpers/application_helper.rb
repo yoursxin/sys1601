@@ -33,9 +33,9 @@ module ApplicationHelper
 		end
 	end
 	def getZjye
-		Zjtz.where("zt in ('2','4')").sum(:je)
+		Zjtz.where("zt in ('2','4','6')").sum(:je)
 	end
 	def getPjye
-		 Pjmr.where("kczt in ('2','4')").sum(:pmje)
+		 Pjmr.where("kczt in ('2','4','6')").sum(:pmje)
 	end
 end
