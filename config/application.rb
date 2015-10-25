@@ -34,7 +34,7 @@ module SampleApp
     config.active_record.default_timezone = :Beijing
 
     
-    WillPaginate.per_page = 15
+    WillPaginate.per_page = 30
   end
 end
 

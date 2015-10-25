@@ -38,4 +38,18 @@ module ApplicationHelper
 	def getPjye
 		 Pjmr.where("kczt in ('2','4','6')").sum(:pmje)
 	end
+	def genZjpjyeBar
+		zjye = getZjye
+		pjye = getPjye
+		classname='bg-primary'
+		if zjye == pjye
+			classname='bg-success'
+		end
+		'<p  class='+classname+'>' \
+		+'  库存票据金额总计：'+number_to_currency(pjye,unit: '')+'元'\
+		+'，资金余额总计：'  +number_to_currency(zjye,unit: '')+'元'\
+		+'，差额：'  +number_to_currency(pjye-zjye,unit: '')+'元'\
+		+'</p>'
+
+	end
 end

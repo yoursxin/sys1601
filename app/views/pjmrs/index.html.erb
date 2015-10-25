@@ -1,3 +1,5 @@
+
+
 <h4>票据查询</h4>
 <%=form_tag pjmrs_path, method: :get, class: 'form-horizotal' do%>
 <%=render partial: 'pjmrFindCons'%>	
@@ -5,11 +7,14 @@
 
 <% end %>
 <hr>
-库存票据金额总计：<%=getPjye%> &nbsp;&nbsp; 资金余额总计：<%=getZjye%>
-<hr>
+
+<%=genZjpjyeBar().html_safe%>
 <%=form_tag rksq_pjmrs_path, method: :put do %>
-<%= will_paginate %>
+
+ <%= will_paginate %>
 <%=render partial: 'pjmrList', object: @pjmrs%>
 <%= will_paginate %>
 
 <% end %>
+
+
