@@ -5,7 +5,7 @@
 
 <% end %>
 <hr>
-<%=genZjpjyeBar().html_safe%>
+<%=sanitize(genZjpjyeBar())%>
 <%=form_tag rjsq_zjtzs_path, method: :put do %>
 <%= will_paginate %>
 <%=render partial: 'zjtzList', object: @zjtzs%>

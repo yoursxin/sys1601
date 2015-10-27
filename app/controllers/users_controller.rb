@@ -40,7 +40,7 @@ class UsersController < ApplicationController
   private
   def user_params
     params.require(:user).permit(:password,:name,:email,
-    :password_confirmation, :roles) 
+    :password_confirmation, roles: []) 
   end
 
   def correct_user
