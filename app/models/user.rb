@@ -1,38 +1,38 @@
-class User < ActiveRecord::Base
-  has_many :microposts, dependent: :destroy
-  has_many :relationships,foreign_key: "follower_id", dependent: :destroy
-  has_many :followed_users, through: :relationships, source: :followed
-  has_many :reverse_relationships, foreign_key:"followed_id",class_name: "Relationship",dependent: :destroy
-  has_many :followers, through: :reverse_relationships, source: :follower
+class User < ActiveRecord::Base  
 
   before_save { self.email = email.downcase }
   before_create :create_remember_token
   
-  validates :name, presence: true, length: { maximum: 50 }
-  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  validates :name, presence: true, length: { maximum: 50 }  
   validates :email, presence: true,            
             uniqueness: { case_sensitive: false }
   has_secure_password
   validates :password, length: { minimum: 6 }
   
+
+  
+  ROLES = %w[票据录入岗  票据审核岗 资金录入岗 资金审核岗 admin] 
+
+  def roles=(roles)
+    logger.debug ">>>> in roles="
+    self.roles_mask = (roles & ROLES).map { |r| 2**ROLES.index(r) }.sum
+    logger.debug ">>>>> rolses:"+roles.to_s+"  roles & ROLES:"+ (roles & ROLES).to_s
+  end
+  
+  def roles  
+    ROLES.reject { |r| ((roles_mask || 0) & 2**ROLES.index(r)).zero? }
+  end
+  
+  def role_symbols
+    roles.map(&:to_sym)
+  end
+
   def User.new_remember_token
     SecureRandom.urlsafe_base64
   end
   def User.encrypt(token)
     Digest::SHA1.hexdigest(token.to_s)
-  end
-  def feed
-    Micropost.from_users_followed_by(self)
-  end
-  def following?(other_user)
-    self.relationships.find_by(followed_id: other_user.id)
-  end
-  def follow!(other_user)
-    self.relationships.create!(followed_id: other_user.id)
-  end
-  def unfollow!(other_user)
-    self.relationships.find_by(followed_id: other_user.id).destroy
-  end
+  end 
 
   private
     def create_remember_token
