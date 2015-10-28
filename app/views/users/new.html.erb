@@ -1,18 +1,32 @@
-<% provide(:title, 'Sign up') %>
-<h1>Sign up</h1>
+<% provide(:title, '新建用户') %>
+<h1>新建用户</h1>
 <div class="row">
 <div class="span6 offset3">
 <%= form_for(@user) do |f| %>
 <%= render 'shared/error_messages', object:f.object %>
-<%= f.label :name %>
-<%= f.text_field :name %>
-<%= f.label :email %>
-<%= f.text_field :email %>
-<%= f.label :password %>
-<%= f.password_field :password %>
-<%= f.label :password_confirmation, "Confirmation" %>
-<%= f.password_field :password_confirmation %>
-<%= f.submit "Create my account", class: "btn btn-large btn-primary" %>
+<div class="form-group">
+  <%= f.label :email, "工号" %>
+  <%= f.text_field :email %>
+</div>
+<div class="form-group">
+  <%= f.label :name, "姓名" %>
+  <%= f.text_field :name %>
+</div>
+<div class="form-group">
+  <%= f.label :password , "密码"%>
+  <%= f.password_field :password %>  
+  <%= f.label :password_confirmation, "密码确认" %>
+  <%= f.password_field :password_confirmation %>
+</div>
+<div class="form-group">
+<%= f.label :roles, "角色" %>
+        <% for role in User::ROLES %>
+          <%= check_box_tag "user[roles][]", role, @user.roles.include?(role) %>
+          <%=h role.humanize%>
+        <% end %>
+        <%= hidden_field_tag "user[roles][]"%>
+</div>
+<%= f.submit "保存", class: "btn btn-large btn-primary" %>
 <% end %>
 </div>
 </div>

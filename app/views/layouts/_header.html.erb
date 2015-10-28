@@ -12,10 +12,18 @@
                 票据管理
               </a>
               <ul class="dropdown-menu">
-                <li><%= link_to "录入管理", lrIndex_pjmrs_path %></li>                
-                <li><%= link_to "入库审核", rkdshIndex_pjmrs_path %></li>
-                <li><%= link_to "出库申请", rkIndex_pjmrs_path %></li>
-                <li><%= link_to "出库审核", ckdshIndex_pjmrs_path %></li>
+                <% if can? :lrIndex, Pjmr %>
+                   <li><%= link_to "录入管理", lrIndex_pjmrs_path %></li>      
+                <% end %>
+                <% if can? :rkdshIndex, Pjmr %>         
+                  <li><%= link_to "入库审核", rkdshIndex_pjmrs_path %></li>
+                <% end %>
+                <% if can? :rkIndex, Pjmr %>
+                  <li><%= link_to "出库申请", rkIndex_pjmrs_path %></li>
+                <% end %>
+                <% if can? :ckdshIndex, Pjmr %>
+                  <li><%= link_to "出库审核", ckdshIndex_pjmrs_path %></li>
+                <% end %>
                 <li class="divider"></li>
                 <li><%= link_to "票据查询", pjmrs_path %></li> 
               </ul>
@@ -26,10 +34,18 @@
                 资金管理
               </a>
               <ul class="dropdown-menu">
-                <li><%= link_to "录入管理", lrIndex_zjtzs_path %></li>               
-                <li><%= link_to "入金审核", rjdshIndex_zjtzs_path %></li>
-                <li><%= link_to "结清申请", rjIndex_zjtzs_path %></li>
-                <li><%= link_to "结清审核", cjdshIndex_zjtzs_path %></li>
+                <% if can? :lrIndex, Zjtz %>
+                  <li><%= link_to "录入管理", lrIndex_zjtzs_path %></li> 
+                <% end %>              
+                <% if can? :rjdshIndex, Zjtz %>
+                  <li><%= link_to "入金审核", rjdshIndex_zjtzs_path %></li>
+                <% end %>
+                <% if can? :rjIndex, Zjtz %>
+                  <li><%= link_to "结清申请", rjIndex_zjtzs_path %></li>
+                <% end %>
+                <% if can? :cjdshIndex, Zjtz %>
+                  <li><%= link_to "结清审核", cjdshIndex_zjtzs_path %></li>
+                <% end %>
                 <li class="divider"></li>
                 <li><%= link_to "资金查询", zjtzs_path %></li> 
               </ul>
@@ -45,6 +61,9 @@
               <ul class="dropdown-menu">
               
                 <li><%= link_to "设置", edit_user_path(current_user) %></li>
+                <% if can? :index, User %>
+                  <li><%= link_to "用户管理", users_path %> </li>
+                <% end %>
                 <li class="divider"></li>
                 <li>
                 <%= link_to "退出", signout_path, method: "delete" %>

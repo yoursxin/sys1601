@@ -1,8 +1,7 @@
-<li>
-  <%= gravatar_for user %>
-  <%= link_to user.name, user %>
+<li> 
+  <%= link_to user.email+' : '+user.name, adminEdit_user_path(user) %>
   <% if current_user.admin? && !current_user?(user) %>
-      | <%= link_to "delete", user, method: :delete,
-                    data: { confirm: "You sure?" } %>
+      | <%= link_to "删除", user, method: :delete,
+                    data: { confirm: "您确认删除?" } %>
   <% end %>
 </li>

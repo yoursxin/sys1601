@@ -1,6 +1,7 @@
 class ZjtzsController < ApplicationController
 
 	before_action :signed_in_user
+	load_and_authorize_resource
 
 	def index
 		wh = genFindCon(params)

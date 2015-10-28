@@ -1,0 +1,33 @@
+<% provide(:title, "Edit user") %>
+<h1>更新设置</h1>
+<div class="row">
+  <div class="span6 offset3">
+     <%= form_for @user, :url => adminUpdate_user_path, :html => {:method => :patch} do |f| %>
+        <%= render 'shared/error_messages',object:f.object %>
+        <div class="form-group">
+          <%= f.label :email, '工号' %>
+          <%= @user.email %>&nbsp;
+        </div>
+        <div class="form-group">
+          <%= f.label :name, '姓名' %>
+          <%= f.text_field :name %>
+        </div>
+        <div class="form-group">       
+          <%= f.label :password,'密码' %>
+          <%= f.password_field :password %>
+          <%= f.label :password_confirmation, "密码确认" %>
+          <%= f.password_field :password_confirmation %>
+        </div>
+        <div class="form-group">
+          <%= f.label :roles, "角色" %>
+          <% for role in User::ROLES %>
+            <%= check_box_tag "user[roles][]", role, @user.roles.include?(role) %>
+            <%=h role.humanize%>
+          <% end %>
+          <%= hidden_field_tag "user[roles][]"%>
+        </div>
+        <%= f.submit "保存", class: "btn btn-large btn-primary" %>
+    <% end %>
+   
+  </div>
+</div>

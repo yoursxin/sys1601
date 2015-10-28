@@ -11,13 +11,7 @@
         <%= f.label :password,'密码' %>
         <%= f.password_field :password %>
         <%= f.label :password_confirmation, "密码确认" %>
-        <%= f.password_field :password_confirmation %>
-        <%= f.label :roles, "角色" %>
-        <% for role in User::ROLES %>
-          <%= check_box_tag "user[roles][]", role, @user.roles.include?(role) %>
-          <%=h role.humanize%>
-        <% end %>
-        <%= hidden_field_tag "user[roles][]"%>
+        <%= f.password_field :password_confirmation %>        
         <%= f.submit "保存", class: "btn btn-large btn-primary" %>
     <% end %>
    

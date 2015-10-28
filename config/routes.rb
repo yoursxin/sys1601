@@ -27,19 +27,15 @@ Rails.application.routes.draw do
   get :rjIndex, on: :collection 
   put :cjsq, on: :collection 
   post :cjpledit, on: :collection 
-  get :cjdshIndex, on: :collection
-  get :cjdshIndex, on: :collection
+  get :cjdshIndex, on: :collection 
   put :cjsh, on: :collection
  end
 
   resources :users do
-    member do
-      get :following, :followers
-    end
+    get :adminEdit, on: :member
+    patch :adminUpdate, on: :member
   end
-  resources :sessions, only:[:new, :create, :destroy]
-  #resources :microposts, only:[:create, :destroy]
-  #resources :relationships, only:[:create, :destroy]
+  resources :sessions, only:[:new, :create, :destroy]  
   
 
   root to: 'pjmrs#index'
