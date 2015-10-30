@@ -5,12 +5,12 @@ source 'http://rubygems.org'
 gem 'rails', '4.1.8'
 # Use sqlite3 as the database for Active Record
 group :development, :test do
-gem 'sqlite3'
-gem 'rspec-rails', '2.13.1'
+  gem 'sqlite3'
+  gem 'rspec-rails', '2.13.1'
 end
 group :test do
-gem 'selenium-webdriver', '2.0.0'
-gem 'capybara', '2.1.0'
+  gem 'selenium-webdriver', '2.0.0'
+  gem 'capybara', '2.1.0'
 end
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
@@ -56,3 +56,8 @@ gem 'zip'
 gem 'roo'
 gem 'roo-xls'
 gem 'cancancan', '~> 1.10'
+
+group :production do
+  gem 'tiny_tds'
+  gem 'activerecord-sqlserver-adapter', '~> 4.1.0'
+end 

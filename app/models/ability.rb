@@ -12,39 +12,19 @@ class Ability
     end
     
     if user.role? :票据录入岗
-        can :lrIndex, Pjmr
-        can :import, Pjmr
-        can :rksq, Pjmr        
-
-        can :rkIndex, Pjmr
-        can :cksq, Pjmr
-        can :ckpledit, Pjmr
-        can :ckplsq, Pjmr
+        can [:lrIndex, :import, :rksq, :rkIndex, :cksq, :ckpledit, :ckplsq], Pjmr       
     end
 
     if  user.role? :票据审核岗
-        can :rkdshIndex, Pjmr
-        can :rksh, Pjmr
-
-        can :ckdshIndex, Pjmr  
-        can :cksh, Pjmr
+        can [:rkdshIndex, :rksh, :ckdshIndex, :cksh], Pjmr      
     end
 
     if  user.role? :资金录入岗
-        can :lrIndex, Zjtz
-        can :rjsq, Zjtz 
-
-        can :rjIndex, Zjtz
-        can :cjsq, Zjtz
-        can :cjpledit, Zjtz
+        can [:lrIndex, :rjsq, :rjIndex, :cjsq, :cjpledit, :new, :create], Zjtz       
     end
 
     if  user.role? :资金审核岗
-        can :rjdshIndex, Zjtz
-        can :rjsh, Zjtz
-
-        can :cjdshIndex, Zjtz
-        can :cjsh, Zjtz
+        can [:rjdshIndex, :rjsh, :cjdshIndex, :cjsh], Zjtz        
     end
     # Define abilities for the passed in user here. For example:
     #
