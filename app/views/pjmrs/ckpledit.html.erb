@@ -1,67 +1,69 @@
 <h4>票据卖出信息</h4>
 
+<div class="control-group">
 
 <%= form_for :pjmc, :url => ckplsq_pjmrs_path, :html => {:method => :put} do |f| %>
 
+	<div class="controls">
 	票号：
-	<% @pjmrs.each do |pjmr| %>
+	  <% @pjmrs.each do |pjmr| %>
 		<%=hidden_field_tag "pjmr_ids[]", pjmr.id %>
 		<%=pjmr.ph%>&nbsp;
-	<% end %>
-	<div class="form-group">
-	  <%=f.label :pch,"卖出批次号" %><br/>
-	  <%=f.text_field  :pch, class: "form-control" %>
+	  <% end %>
 	</div>
-	<div class="form-group">
-	  <%=f.label :khmc,"转出贴现客户" %><br/>
-	  <%=f.text_field  :khmc, class: "form-control" %>
+	<div class="controls">
+	  <%=f.label :pch,"卖出批次号　：", class: "control-label" %>	  
+	  <%=f.text_field  :pch %>
 	</div>
-	<div class="form-group">
-	  <%=f.label :zmrq,"转卖日期" %><br/>
-	  <%=f.text_field  :zmrq, class: "form-control" %>
+	<div class="controls">
+	  <%=f.label :khmc,"转出贴现客户：", class: "control-label" %>
+	  <%=f.text_field  :khmc %>
 	</div>
-	<div class="form-group">
-	  <%=f.label :txlx,"转卖类型" %><br/>
-	  <%=f.text_field  :txlx, class: "form-control" %>
+	<div class="controls">
+	  <%=f.label :zmrq,"转卖日期　　：", class: "control-label" %>
+	  <%=f.date_field  :zmrq %>
 	</div>
-	<div class="form-group">
-	  <%=f.label :jjrjt,"节假日加天" %><br/>
-	  <%=f.text_field  :jjrjt, class: "form-control" %>
+	<div class="controls">
+	  <%=f.label :txlx,"转卖类型　　：", class: "control-label" %>
+	  <%=f.text_field  :txlx %>
 	</div>
-	<div class="form-group">
-	  <%=f.label :ydjt,"异地加天" %><br/>
-	  <%=f.text_field  :ydjt, class: "form-control" %>
+	<div class="controls">
+	  <%=f.label :jjrjt,"节假日加天　：", class: "control-label" %>
+	  <%=f.number_field  :jjrjt %>
 	</div>
-	<div class="form-group">
-	  <%=f.label :jxts,"计息天数" %><br/>
-	  <%=f.text_field  :jxts, class: "form-control" %>
+	<div class="controls">
+	  <%=f.label :ydjt,"异地加天　　：" , class: "control-label"%>
+	  <%=f.number_field  :ydjt %>
 	</div>
-	<div class="form-group">
-	  <%=f.label :jxdqrq,"计息到期日" %><br/>
-	  <%=f.text_field  :jxdqrq, class: "form-control" %>
+	<div class="controls">
+	  <%=f.label :jxts,"计息天数　　：", class: "control-label" %>
+	  <%=f.number_field  :jxts %>
 	</div>
-	<div class="form-group">
-	  <%=f.label :zcll,"转出利率" %><br/>
-	  <%=f.text_field  :zcll, class: "form-control" %>
+	<div class="controls">
+	  <%=f.label :jxdqrq,"计息到期日　：" , class: "control-label"%>
+	  <%=f.date_field  :jxdqrq %>
 	</div>
-	<div class="form-group">
-	  <%=f.label :zclx,"转出利息" %><br/>
-	  <%=f.text_field  :zclx, class: "form-control" %>
+	<div class="controls">
+	  <%=f.label :zcll,"转出利率　　：" , class: "control-label"%>
+	  <%=f.number_field  :zcll %>
 	</div>
-	<div class="form-group">
-	  <%=f.label :ssje,"实收金额" %><br/>
-	  <%=f.text_field  :ssje, class: "form-control" %>
+	<div class="controls">
+	  <%=f.label :zclx,"转出利息　　：" , class: "control-label"%>
+	  <%=f.number_field  :zclx %>
 	</div>
-	<div class="form-group">
-	  <%=f.label :khjlmc,"转卖客户经理" %><br/>
-	  <%=f.text_field  :khjlmc, class: "form-control" %>
+	<div class="controls">
+	  <%=f.label :ssje,"实收金额　　：" , class: "control-label"%>
+	  <%=f.number_field  :ssje %>
 	</div>
-	<div class="form-group">
-	  <%=f.label :dabh,"转卖档案编号" %><br/>
-	  <%=f.text_field  :dabh, class: "form-control" %>
+	<div class="controls">
+	  <%=f.label :khjlmc,"转卖客户经理：" , class: "control-label"%>
+	  <%=f.text_field  :khjlmc %>
+	</div>
+	<div class="controls">
+	  <%=f.label :dabh,"转卖档案编号：" , class: "control-label"%>
+	  <%=f.text_field  :dabh %>
 	</div>
 	
 	<%=f.submit "提交",  class: "btn  btn-default"%>
-
-
 <% end %>
+</div>

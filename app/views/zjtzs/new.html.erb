@@ -1,54 +1,56 @@
 <h4>录入管理-新建</h4>
+<div class="control-group">
 <%=form_for @zjtz do |f| %>
-<div class="form-group">
-  <%=f.label :bh,"资金编号" %><br/>
-  <%=f.text_field  :bh, class: "form-control" %>
+<div class="controls">
+  <%=f.label :bh,"资金编号：" %>
+  <%=f.text_field  :bh %>
 </div>
-<div class="form-group">
-  <%=f.label :khmc,"客户名称" %><br/>
-  <%=f.text_field  :khmc, class: "form-control" %>
+<div class="controls">
+  <%=f.label :khmc,"客户名称：" %>
+  <%=f.text_field  :khmc %>
 </div>
-<div class="form-group">
-  <%=f.label :cpms,"产品描述" %><br/>
-  <%=f.text_field  :cpms, class: "form-control" %>
+<div class="controls">
+  <%=f.label :cpms,"产品描述：" %>
+  <%=f.text_field  :cpms %>
 </div>
-<div class="form-group">
-  <%=f.label :je,"金额" %><br/>
-  <%=f.number_field  :je, class: "form-control" %>
+<div class="controls">
+  <%=f.label :je,"金　　额：" %>
+  <%=f.number_field  :je %>
 </div>
-<div class="form-group">
-  <%=f.label :biz,"币种" %><br/>
-  <%=f.text_field  :bz, class: "form-control" %>
+<div class="controls">
+  <%=f.label :biz,"币　　种：" %>
+  <%=f.text_field  :biz %>
 </div>
-<div class="form-group">
-  <%=f.label :csqxrq,"起息日" %><br/>
-  <%=f.date_field  :csqxrq, class: "form-control" %>
+<div class="controls">
+  <%=f.label :csqxrq,"起息日　：" %>
+  <%=f.date_field  :csqxrq %>
 </div>
-<div class="form-group">
-  <%=f.label :csdqrq,"到期日" %><br/>
-  <%=f.date_field  :csdqrq, class: "form-control" %>
+<div class="controls">
+  <%=f.label :csdqrq,"到期日　：" %>
+  <%=f.date_field  :csdqrq %>
 </div>
-<div class="form-group">
-  <%=f.label :csll,"利率" %><br/>
-  <%=f.number_field  :csll, class: "form-control" %>
+<div class="controls">
+  <%=f.label :csll,"利　　率：" %>
+  <%=f.number_field  :csll %>
 </div>
-<div class="form-group">
-  <%=f.label :csjxts,"计息天数" %><br/>
-  <%=f.number_field  :csjxts, class: "form-control" %>
+<div class="controls">
+  <%=f.label :csjxts,"计息天数：" %>
+  <%=f.number_field  :csjxts %>
 </div>
-<div class="form-group">
-  <%=f.label :cslx,"利息" %><br/>
-  <%=f.number_field  :cslx, class: "form-control" %>
+<div class="controls">
+  <%=f.label :cslx,"利　　息：" %>
+  <%=f.number_field  :cslx %>
 </div>
-<div class="form-group">
-  <%=f.label :khjlmc,"客户经理" %><br/>
-  <%=f.text_field  :khjlmc, class: "form-control" %>
+<div class="controls">
+  <%=f.label :khjlmc,"客户经理：" %>
+  <%=f.text_field  :khjlmc %>
 </div>
-<div class="form-group">
-  <%=f.label :bz,"备注" %><br/>
-  <%=f.text_field  :bz, class: "form-control" %>
+<div class="controls">
+  <%=f.label :bz,"备　　注：" %>
+  <%=f.text_field  :bz %>
 </div>
 
 <%=f.submit "提交",  class: "btn  btn-default"%>
 
 <% end %>
+</div>

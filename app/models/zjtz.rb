@@ -1,5 +1,13 @@
 class Zjtz < ActiveRecord::Base
+	validates :ll, numericality: {greater_than_or_equal_to: 0}
+	validates :jxts, numericality: {greater_than_or_equal_to: 0}	 
+	validates :lx, numericality: {greater_than_or_equal_to: 0}	 
+	validates :csll, numericality: {greater_than_or_equal_to: 0}
+	validates :csjxts, numericality: {greater_than_or_equal_to: 0}	 
+	validates :cslx, numericality: {greater_than_or_equal_to: 0}	 
+	
 
+	
 	#批量入金申请
 	def self.plrjsq( ids, usid)
 		Zjtz.transaction do

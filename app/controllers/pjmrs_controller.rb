@@ -33,16 +33,19 @@ class PjmrsController < ApplicationController
 	end
 	
 	#入库审核
-	def rksh		
+	def rksh
+	  if params[:pjmr_ids].blank?
+			flash[:warning] = "请选择要操作的记录"			
+	  else		
 		if params[:rksh_btn]
 			Pjmr.plrksh(params[:pjmr_ids], current_user.name)
 			flash[:success] = "入库成功"
 		elsif params[:rksqth_btn]	
 			Pjmr.plrksqth(params[:pjmr_ids], current_user.name)
 			flash[:success] = "入库申请退回成功"
-		end	
-
-		redirect_to rkdshIndex_pjmrs_url
+		end
+	  end	
+	  redirect_to rkdshIndex_pjmrs_url
 	end
 
 
@@ -61,18 +64,23 @@ class PjmrsController < ApplicationController
 	end
 
 	#入库申请
-	def rksq 		
-		if params[:del_btn]			
+	def rksq 
+		
+		if params[:pjmr_ids].blank?
+			flash[:warning] = "请选择要操作的记录"			
+		else
+		  if params[:del_btn]			
 			Pjmr.pllrdel params[:pjmr_ids]
 			flash[:success] ="删除成功"
-		elsif params[:rksq_btn]
+		  elsif params[:rksq_btn]
 			Pjmr.plrksq(params[:pjmr_ids], current_user.name)
 			flash[:success] = "入库申请成功"
-		end			
+		  end		  
+		end
 		redirect_to lrIndex_pjmrs_url
 	rescue ActiveRecord::RecordNotFound
 		logger.error "查找票据失败"+$!.to_s
-		flash[:error] = "未选择或选择的票据不存在"
+		flash[:warning] = "未选择或选择的票据不存在"
 		redirect_to lrIndex_pjmrs_url
 	end	
 
@@ -81,34 +89,29 @@ class PjmrsController < ApplicationController
 		redirect_to lrIndex_pjmrs_url, notice: "导入成功"
 	end 
 
-	def genFindCon(params)
-		wh={}		
-		params.keys.each do |key|
-			val = params[key]
-			wh[key[2,key.length-1]] = val if !val.blank? && key.index("f_")==0			
-		end
-		logger.debug "wh: "+wh.to_s
-		wh
-	end 
-
-
+	
 
 	#出库批量编辑
 	def ckpledit
-		if params[:cksq_btn]
+		if params[:pjmr_ids].blank?
+			flash[:warning] = "请选择要操作的记录"
+			redirect_to rkIndex_pjmrs_path
+		else
+		  if params[:cksq_btn]
 			@pjmrs = Pjmr.find(params[:pjmr_ids])
-		elsif params[:cksqdel_btn]
+			
+		  elsif params[:cksqdel_btn]
 			Pjmr.plcksqdel params[:pjmr_ids], current_user.name
 			flash[:sucess] = '出库申请删除成功'
 			redirect_to rkIndex_pjmrs_path
+		  end
 		end			
 	end
 
  	#出库批量申请
  	def ckplsq
  		if params[:pjmr_ids].blank?
- 			flash[:error] = "未选择或选择的票据不存在"
- 			redirect_to rkIndex_pjmrs_path
+ 			flash[:warning] = "未选择或选择的票据不存在" 			
  		else
  			Pjmr.transaction do
  				params[:pjmr_ids].each do |id|
@@ -120,26 +123,45 @@ class PjmrsController < ApplicationController
  					pjmr.pjmc.cksqsj=Time.now				
  					pjmr.save!  
  				end
- 			end
- 			redirect_to rkIndex_pjmrs_path
+ 			end 			
  		end
+ 		redirect_to rkIndex_pjmrs_path
  	end
 
+ 	
+
+ 	#出库审核
+ 	def cksh
+ 		if params[:pjmr_ids].blank?
+			flash[:warning] = "请选择要操作的记录"			
+		else
+ 		  if params[:cksh_btn]
+ 			Pjmr.plcksh(params[:pjmr_ids],current_user.name)
+ 			flash[:success] = "出库成功"
+ 		  elsif params[:cksqth_btn]
+ 			Pjmr.plcksqth(params[:pjmr_ids],current_user.name)
+ 			flash[:success] = "出库申请退回成功"
+ 		  end
+ 		end
+ 		redirect_to ckdshIndex_pjmrs_path
+ 	end
+
+ 	private
  	def pjmc_params
  		params.require(:pjmc).permit(:ph, :pch, :khmc, :zmrq, :txlx, :jjrjt, :ydjt, :jxts, :jxdqrq, :zcll\
  			, :zclx, :ssje, :khjlmc, :dabh)
  	end 
 
- 	#出库审核
- 	def cksh
- 		if params[:cksh_btn]
- 			Pjmr.plcksh(params[:pjmr_ids],current_user.name)
- 			flash[:success] = "出库成功"
- 		elsif params[:cksqth_btn]
- 			Pjmr.plcksqth(params[:pjmr_ids],current_user.name)
- 			flash[:success] = "出库申请退回成功"
- 		end
- 		redirect_to ckdshIndex_pjmrs_path
- 	end
+ 	def genFindCon(params)
+		wh={}		
+		params.keys.each do |key|
+			val = params[key]
+			wh[key[2,key.length-1]] = val if !val.blank? && key.index("f_")==0			
+		end
+		logger.debug "wh: "+wh.to_s
+		wh
+	end 
+
+
 
 end

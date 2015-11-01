@@ -14,18 +14,26 @@ class ZjtzsController < ApplicationController
 		if params[:lr_btn]
 			redirect_to new_zjtz_path
 		elsif params[:del_btn]			
+		  if params[:zjtz_ids].blank?
+	        flash[:warning] = "请选择要操作的记录"
+	      else
 			Zjtz.pllrdel params[:zjtz_ids]
 			flash[:success] ="删除成功"
-			redirect_to lrIndex_zjtzs_path
+		  end
+		  redirect_to lrIndex_zjtzs_path
 		elsif params[:rjsq_btn]
+		  if params[:zjtz_ids].blank?
+	        flash[:warning] = "请选择要操作的记录"
+	      else
 			Zjtz.plrjsq(params[:zjtz_ids], current_user.name)
 			flash[:success] = "入金申请成功"
-			redirect_to lrIndex_zjtzs_path
+		  end
+		  redirect_to lrIndex_zjtzs_path
 		end
 		
 	rescue ActiveRecord::RecordNotFound
 		logger.error "查找记录败"+$!.to_s
-		flash[:error] = "未选择或选择的记录不存在"
+		flash[:warning] = "未选择或选择的记录不存在"
 		redirect_to lrIndex_zjtzs_path		
 	end
 
@@ -52,6 +60,9 @@ class ZjtzsController < ApplicationController
 	
 	#入金审核
 	def rjsh		
+	  if params[:zjtz_ids].blank?
+	    flash[:warning] = "请选择要操作的记录"
+	  else
 		if params[:rjsh_btn]
 			Zjtz.plrjsh(params[:zjtz_ids], current_user.name)
 			flash[:success] = "入金成功"
@@ -59,12 +70,14 @@ class ZjtzsController < ApplicationController
 			Zjtz.plrjsqth(params[:zjtz_ids], current_user.name)
 			flash[:success] = "入金申请退回成功"
 		end	
-
-		redirect_to rjdshIndex_zjtzs_path
+	  end
+      redirect_to rjdshIndex_zjtzs_path
 	end
 
 	def new 
-		@zjtz = Zjtz.new		
+		@zjtz = Zjtz.new	
+		@zjtz.csqxrq = Date.today
+		@zjtz.biz = '人民币'		
 	end
 	def create
 		@zjtz = Zjtz.new(zjtz_params)
@@ -81,19 +94,32 @@ class ZjtzsController < ApplicationController
 
 	#出金批量编辑
 	def cjpledit
+	  if params[:zjtz_ids].blank?
+	    flash[:warning] = "请选择要操作的记录"
+	  else
 		if params[:cjsq_btn]
 			@zjtzs = Zjtz.find(params[:zjtz_ids])
+			@zjtz = Zjtz.new					
+			@zjtz.ll =  (@zjtzs.presence) [0].csll
+			@zjtz.lx =  (@zjtzs.presence) [0].cslx
+			@zjtz.jxts =  (@zjtzs.presence) [0].csjxts
+			@zjtz.qxrq =  (@zjtzs.presence) [0].csqxrq
+			@zjtz.dqrq =  (@zjtzs.presence) [0].csdqrq
+
 		elsif params[:cjsqdel_btn]
 			Zjtz.plcjsqdel params[:zjtz_ids], current_user.name
 			flash[:sucess] = '结清申请删除成功'
 			redirect_to rjIndex_zjtzs_path
-		end			
+
+		end
+
+	  end			
 	end
 
  	#出金批量申请
  	def cjsq
  		if params[:zjtz_ids].blank?
- 			flash[:error] = "未选择或选择的记录不存在"
+ 			flash[:warning] = "未选择或选择的记录不存在"
  			redirect_to rjIndex_zjtzs_path
  		else
  			Zjtz.transaction do
@@ -106,11 +132,12 @@ class ZjtzsController < ApplicationController
  					zjtz.save!  
  				end
  			end
- 			flash[:success] = "结清申请成功"
- 			redirect_to rjIndex_zjtzs_path
-
-
+ 			flash[:success] = "结清申请成功" 			
  		end
+ 		redirect_to rjIndex_zjtzs_path
+
+ 	
+
  	end
 
  	#出金待审核清单，进行出库
@@ -122,6 +149,9 @@ class ZjtzsController < ApplicationController
 
 	#出金审核
  	def cjsh
+ 	  if params[:zjtz_ids].blank?
+	    flash[:warning] = "请选择要操作的记录"
+	  else	
  		if params[:cjsh_btn] 			
  			Zjtz.plcjsh(params[:zjtz_ids],current_user.name) 
  			flash[:success] = "结清成功"
@@ -129,9 +159,11 @@ class ZjtzsController < ApplicationController
  			Zjtz.plcjsqth(params[:zjtz_ids],current_user.name)
  			flash[:success] = "结清申请退回成功"
  		end
- 		redirect_to cjdshIndex_zjtzs_path
+ 	  end
+ 	  redirect_to cjdshIndex_zjtzs_path
  	end
 	
+ 	private
 
 	def zjtz_params
  		params.require(:zjtz).permit(:bh, :khmc, :cpms, :je, :biz, :csqxrq, :csdqrq \
