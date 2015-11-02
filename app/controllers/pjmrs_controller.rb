@@ -5,8 +5,11 @@ class PjmrsController < ApplicationController
 	
 	def index		
 		wh=genFindCon params
-		wh['lrr']=current_user.name			
-		@pjmrs = Pjmr.where(wh).where("cpr like ? ","%#{params['fl_cpr']}%").order("updated_at desc").paginate(page: params[:page])
+		#wh['lrr']=current_user.name
+		wh["kczt"] = params["kczt_ids"] if params["kczt_ids"].present?	
+		logger.debug ">>>wh:"+wh.to_s
+		@pjmrs = Pjmr.where(wh).where("cpr like ? ","%#{params['fl_cpr']}%")
+			.order("updated_at desc").paginate(page: params[:page])
 				
 	end
 
