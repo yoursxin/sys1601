@@ -1,5 +1,9 @@
 module ApplicationHelper
 	# Returns the full title on a per-page basis.
+	KCZTDESC = {"0" => "录入","1" => "入库待审核","2" => "入库"\
+		, "3" => "入库申请退回", "4" => "出库待审核", "5" => "出库"\
+		, "6" => "出库申请退回"}
+
 	def full_title(page_title)
 		base_title = "SYS1601"
 		if page_title.empty?
@@ -8,18 +12,16 @@ module ApplicationHelper
 			"#{base_title} | #{page_title}"
 		end
 	end
-	def get_kcztdesc(kczt)
-		case kczt
-		when "0" then "录入"
-		when "1" then "入库待审核"
-		when "2" then "入库"
-		when "3" then "入库申请退回"
-		when "4" then "出库待审核"
-		when "5" then "出库"
-		when "6" then "出库申请退回"
-		else "未知"
-		end
-	end
+
+	def get_kcztkeys
+		KCZTDESC.keys
+    end
+
+    def get_kcztdesc(kczt)
+    	KCZTDESC[kczt]
+    end
+	
+	
 	def get_zjztdesc(kczt)
 		case kczt
 		when "0" then "录入"

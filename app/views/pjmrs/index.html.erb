@@ -3,6 +3,12 @@
 <h4>票据查询</h4>
 <%=form_tag pjmrs_path, method: :get, class: 'form-horizotal' do%>
 <%=render partial: 'pjmrFindCons'%>	
+<div class="control">
+<label>状态　：</label>
+<% get_kcztkeys.each do |k| %>
+  <%=check_box_tag 'kczt_ids[]', k, params['kczt_ids'] && params['kczt_ids'].include?(k) %> <%=get_kcztdesc(k) %>
+<% end %>
+</div>
 <%=submit_tag "查询", class: "btn  btn-default" %>
 
 <% end %>
