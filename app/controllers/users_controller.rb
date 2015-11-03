@@ -15,7 +15,7 @@ class UsersController < ApplicationController
 	@user = User.new
   end
   def create
-	@user = User.new(user_params) # Not the final implementation!
+	@user = User.new(adminUser_params) # Not the final implementation!
 	if @user.save
 	  flash[:success] = "用户创建成功!"
 	  redirect_to users_path
