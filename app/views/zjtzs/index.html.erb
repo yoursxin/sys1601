@@ -1,6 +1,12 @@
 <h4>资金查询</h4>
 <%=form_tag zjtzs_path, method: :get, class: 'form-horizotal' do%>
 <%=render partial: 'zjtzFindCons'%>	
+<div class="control">
+<label>状态　：</label>
+<% get_zjztkeys.each do |k| %>
+  <%=check_box_tag 'zjzt_ids[]', k, params['zjzt_ids'] && params['zjzt_ids'].include?(k) %> <%=get_zjztdesc(k) %>
+<% end %>
+</div>
 <%=submit_tag "查询", class: "btn  btn-default" %>
 
 <% end %>

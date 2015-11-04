@@ -1,10 +1,11 @@
 class Zjtz < ActiveRecord::Base
-	validates :ll, numericality: {greater_than_or_equal_to: 0}
-	validates :jxts, numericality: {greater_than_or_equal_to: 0}	 
-	validates :lx, numericality: {greater_than_or_equal_to: 0}	 
-	validates :csll, numericality: {greater_than_or_equal_to: 0}
-	validates :csjxts, numericality: {greater_than_or_equal_to: 0}	 
-	validates :cslx, numericality: {greater_than_or_equal_to: 0}	 
+	validates :ll, numericality: {greater_than_or_equal_to: 0}, :allow_nil => true
+	validates :jxts, numericality: true, :allow_nil => true
+	validates :lx, numericality: {greater_than_or_equal_to: 0}, :allow_nil => true
+	validates :csll, numericality: {greater_than_or_equal_to: 0}, :allow_nil => true
+	validates :csjxts, numericality: {greater_than_or_equal_to: 0}, :allow_nil => true
+	validates :cslx, numericality: {greater_than_or_equal_to: 0}, :allow_nil => true
+	validates :je, numericality: {greater_than_or_equal_to: 0}, :allow_nil => true
 	
 
 	
@@ -55,6 +56,7 @@ class Zjtz < ActiveRecord::Base
 				zjtz.save!
 			end
 		end
+		
 	end
 
 	#批量入金审核

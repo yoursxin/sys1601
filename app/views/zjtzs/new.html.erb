@@ -1,3 +1,4 @@
+
 <h4>录入管理-新建</h4>
 <div class="control-group">
 <%=form_for @zjtz do |f| %>
@@ -15,7 +16,7 @@
 </div>
 <div class="controls">
   <%=f.label :je,"金　　额：" %>
-  <%=f.number_field  :je %>
+  <%=f.number_field  :je, :step => "0.01" %>
 </div>
 <div class="controls">
   <%=f.label :biz,"币　　种：" %>
@@ -31,7 +32,7 @@
 </div>
 <div class="controls">
   <%=f.label :csll,"利　　率：" %>
-  <%=f.number_field  :csll %>
+  <%=f.number_field  :csll , :step => "any" %>
 </div>
 <div class="controls">
   <%=f.label :csjxts,"计息天数：" %>
@@ -39,7 +40,7 @@
 </div>
 <div class="controls">
   <%=f.label :cslx,"利　　息：" %>
-  <%=f.number_field  :cslx %>
+  <%=f.number_field  :cslx, :step => "0.01" %>
 </div>
 <div class="controls">
   <%=f.label :khjlmc,"客户经理：" %>

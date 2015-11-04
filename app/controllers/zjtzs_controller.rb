@@ -5,11 +5,11 @@ class ZjtzsController < ApplicationController
 
 	def index
 		wh = genFindCon(params)
+		wh["zt"] = params["zjzt_ids"] if params["zjzt_ids"].present?
 		@zjtzs = Zjtz.where(wh).order("updated_at desc").paginate(page: params[:page])		
-		
-		
+				
 	end
-	#入金申请
+	#入账申请
 	def rjsq
 		if params[:lr_btn]
 			redirect_to new_zjtz_path
@@ -25,8 +25,8 @@ class ZjtzsController < ApplicationController
 		  if params[:zjtz_ids].blank?
 	        flash[:warning] = "请选择要操作的记录"
 	      else
-			Zjtz.plrjsq(params[:zjtz_ids], current_user.name)
-			flash[:success] = "入金申请成功"
+			Zjtz.plrjsq(params[:zjtz_ids], current_user.email)
+			flash[:success] = "入账申请成功"
 		  end
 		  redirect_to lrIndex_zjtzs_path
 		end
@@ -40,35 +40,35 @@ class ZjtzsController < ApplicationController
 	def lrIndex
 		wh = genFindCon(params)
 		wh['zt'] = ["0","3"]  #录入状态
-		wh['lrr'] = current_user.name		
+		wh['lrr'] = current_user.email		
 		@zjtzs = Zjtz.where(wh).order("updated_at desc").paginate(page: params[:page])
 	end
 
-	#入金待审核清单，进行入金
+	#入账待审核清单，进行入账
 	def rjdshIndex		
 		wh=genFindCon params
-		wh['zt'] = "1"  #入金待审核		
+		wh['zt'] = "1"  #入账待审核		
 		@zjtzs = Zjtz.where(wh).paginate(page: params[:page])
 	end
 
-	#入金清单
+	#入账清单
 	def rjIndex		
 		wh=genFindCon params
-		wh['zt'] = ["2","6"]  #入金状态		
+		wh['zt'] = ["2","6"]  #入账状态		
 		@zjtzs = Zjtz.where(wh).paginate(page: params[:page])
 	end
 	
-	#入金审核
+	#入账审核
 	def rjsh		
 	  if params[:zjtz_ids].blank?
 	    flash[:warning] = "请选择要操作的记录"
 	  else
 		if params[:rjsh_btn]
-			Zjtz.plrjsh(params[:zjtz_ids], current_user.name)
-			flash[:success] = "入金成功"
+			Zjtz.plrjsh(params[:zjtz_ids], current_user.email)
+			flash[:success] = "入账成功"
 		elsif params[:rjsqth_btn]	
-			Zjtz.plrjsqth(params[:zjtz_ids], current_user.name)
-			flash[:success] = "入金申请退回成功"
+			Zjtz.plrjsqth(params[:zjtz_ids], current_user.email)
+			flash[:success] = "入账申请退回成功"
 		end	
 	  end
       redirect_to rjdshIndex_zjtzs_path
@@ -82,14 +82,16 @@ class ZjtzsController < ApplicationController
 	def create
 		@zjtz = Zjtz.new(zjtz_params)
 		@zjtz.zt = '0'
-		@zjtz.lrr = current_user.name
+		@zjtz.lrr = current_user.email
 		@zjtz.lrsj = Time.now
-		if @zjtz.save
+		if @zjtz.save!
 			flash[:sucess] = '添加成功'
-			redirect_to  lrIndex_zjtzs_path
-		else
-			render 'new'
+			redirect_to  lrIndex_zjtzs_path		
 		end
+		rescue ActiveRecord::RecordInvalid
+			flash[:warning] = "添加失败,"+$!.to_s
+			render 'new'
+
 	end
 
 	#出金批量编辑
@@ -107,12 +109,11 @@ class ZjtzsController < ApplicationController
 			@zjtz.dqrq =  (@zjtzs.presence) [0].csdqrq
 
 		elsif params[:cjsqdel_btn]
-			Zjtz.plcjsqdel params[:zjtz_ids], current_user.name
+			Zjtz.plcjsqdel params[:zjtz_ids], current_user.email
 			flash[:sucess] = '结清申请删除成功'
 			redirect_to rjIndex_zjtzs_path
 
 		end
-
 	  end			
 	end
 
@@ -127,7 +128,7 @@ class ZjtzsController < ApplicationController
  					zjtz = Zjtz.find(id)
  					zjtz.zt = '4'
  					zjtz.update(zjtz_params) 					
- 					zjtz.cjsqr= current_user.name
+ 					zjtz.cjsqr= current_user.email
  					zjtz.cjsqsj=Time.now				
  					zjtz.save!  
  				end
@@ -153,10 +154,10 @@ class ZjtzsController < ApplicationController
 	    flash[:warning] = "请选择要操作的记录"
 	  else	
  		if params[:cjsh_btn] 			
- 			Zjtz.plcjsh(params[:zjtz_ids],current_user.name) 
+ 			Zjtz.plcjsh(params[:zjtz_ids],current_user.email) 
  			flash[:success] = "结清成功"
  		elsif params[:cjsqth_btn]
- 			Zjtz.plcjsqth(params[:zjtz_ids],current_user.name)
+ 			Zjtz.plcjsqth(params[:zjtz_ids],current_user.email)
  			flash[:success] = "结清申请退回成功"
  		end
  	  end

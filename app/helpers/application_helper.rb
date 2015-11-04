@@ -4,6 +4,10 @@ module ApplicationHelper
 		, "3" => "入库申请退回", "4" => "出库待审核", "5" => "出库"\
 		, "6" => "出库申请退回"}
 
+	ZJZTDESC = {"0" => "录入","1" => "入账待审核","2" => "入账"\
+		, "3" => "入账申请退回", "4" => "结清待审核", "5" => "结清"\
+		, "6" => "结清申请退回"}
+
 	def full_title(page_title)
 		base_title = "SYS1601"
 		if page_title.empty?
@@ -20,25 +24,20 @@ module ApplicationHelper
     def get_kcztdesc(kczt)
     	KCZTDESC[kczt]
     end
+
+    def get_zjztkeys
+		ZJZTDESC.keys
+    end
+
+    def get_zjztdesc(zjzt)
+    	ZJZTDESC[zjzt]
+    end	
 	
-	
-	def get_zjztdesc(kczt)
-		case kczt
-		when "0" then "录入"
-		when "1" then "入金待审核"
-		when "2" then "入金"
-		when "3" then "入金申请退回"
-		when "4" then "结清待审核"
-		when "5" then "结清"
-		when "6" then "结清申请退回"
-		else "未知"
-		end
-	end
 	def getZjye
 		Zjtz.where("zt in ('2','4','6')").sum(:je)
 	end
 	def getPjye
-		 Pjmr.where("kczt in ('2','4','6')").sum(:pmje)
+		 Pjmr.where("kczt in ('2','4','6')").sum(:sfje)
 	end
 	def genZjpjyeBar
 		zjye = getZjye
@@ -48,7 +47,7 @@ module ApplicationHelper
 			classname='bg-success'
 		end
 		'<p  class='+classname+'>' \
-		+'  库存票据金额总计：'+number_to_currency(pjye,unit: '')+'元'\
+		+'  库存票据实付金额总计：'+number_to_currency(pjye,unit: '')+'元'\
 		+'，资金余额总计：'  +number_to_currency(zjye,unit: '')+'元'\
 		+'，差额：'  +number_to_currency(pjye-zjye,unit: '')+'元'\
 		+'</p>'

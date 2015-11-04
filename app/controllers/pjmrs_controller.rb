@@ -5,9 +5,9 @@ class PjmrsController < ApplicationController
 	
 	def index		
 		wh=genFindCon params
-		#wh['lrr']=current_user.name
+		#wh['lrr']=current_user.email
 		wh["kczt"] = params["kczt_ids"] if params["kczt_ids"].present?	
-		logger.debug ">>>wh:"+wh.to_s
+		
 		@pjmrs = Pjmr.where(wh).where("cpr like ? ","%#{params['fl_cpr']}%")
 			.order("updated_at desc").paginate(page: params[:page])
 				
@@ -17,7 +17,7 @@ class PjmrsController < ApplicationController
 	def lrIndex		
 		wh=genFindCon params
 		wh['kczt'] = ["0","3"]  #录入状态
-		wh['lrr'] = current_user.name		
+		wh['lrr'] = current_user.email		
 		@pjmrs = Pjmr.where(wh).paginate(page: params[:page])
 	end
 
@@ -41,10 +41,10 @@ class PjmrsController < ApplicationController
 			flash[:warning] = "请选择要操作的记录"			
 	  else		
 		if params[:rksh_btn]
-			Pjmr.plrksh(params[:pjmr_ids], current_user.name)
+			Pjmr.plrksh(params[:pjmr_ids], current_user.email)
 			flash[:success] = "入库成功"
 		elsif params[:rksqth_btn]	
-			Pjmr.plrksqth(params[:pjmr_ids], current_user.name)
+			Pjmr.plrksqth(params[:pjmr_ids], current_user.email)
 			flash[:success] = "入库申请退回成功"
 		end
 	  end	
@@ -76,7 +76,7 @@ class PjmrsController < ApplicationController
 			Pjmr.pllrdel params[:pjmr_ids]
 			flash[:success] ="删除成功"
 		  elsif params[:rksq_btn]
-			Pjmr.plrksq(params[:pjmr_ids], current_user.name)
+			Pjmr.plrksq(params[:pjmr_ids], current_user.email)
 			flash[:success] = "入库申请成功"
 		  end		  
 		end
@@ -88,7 +88,7 @@ class PjmrsController < ApplicationController
 	end	
 
 	def import
-		Pjmr.import(params[:file], current_user.name)
+		Pjmr.import(params[:file], current_user.email)
 		redirect_to lrIndex_pjmrs_url, notice: "导入成功"
 	end 
 
@@ -104,7 +104,7 @@ class PjmrsController < ApplicationController
 			@pjmrs = Pjmr.find(params[:pjmr_ids])
 			
 		  elsif params[:cksqdel_btn]
-			Pjmr.plcksqdel params[:pjmr_ids], current_user.name
+			Pjmr.plcksqdel params[:pjmr_ids], current_user.email
 			flash[:sucess] = '出库申请删除成功'
 			redirect_to rkIndex_pjmrs_path
 		  end
@@ -122,7 +122,7 @@ class PjmrsController < ApplicationController
  					pjmr.kczt = '4'
  					pjmr.create_pjmc(pjmc_params)
  					pjmr.pjmc.ph = pjmr.ph
- 					pjmr.pjmc.cksqr= current_user.name
+ 					pjmr.pjmc.cksqr= current_user.email
  					pjmr.pjmc.cksqsj=Time.now				
  					pjmr.save!  
  				end
@@ -139,10 +139,10 @@ class PjmrsController < ApplicationController
 			flash[:warning] = "请选择要操作的记录"			
 		else
  		  if params[:cksh_btn]
- 			Pjmr.plcksh(params[:pjmr_ids],current_user.name)
+ 			Pjmr.plcksh(params[:pjmr_ids],current_user.email)
  			flash[:success] = "出库成功"
  		  elsif params[:cksqth_btn]
- 			Pjmr.plcksqth(params[:pjmr_ids],current_user.name)
+ 			Pjmr.plcksqth(params[:pjmr_ids],current_user.email)
  			flash[:success] = "出库申请退回成功"
  		  end
  		end
