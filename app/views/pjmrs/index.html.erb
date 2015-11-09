@@ -18,6 +18,10 @@
 <%=form_tag rksq_pjmrs_path, method: :put do %>
 
  <%= will_paginate %>
+ <p>
+  下载： 
+  <%= link_to "Excel", pjmrs_path(format: "xls") %>
+</p>
 <%=render partial: 'pjmrList', object: @pjmrs%>
 <%= will_paginate %>
 

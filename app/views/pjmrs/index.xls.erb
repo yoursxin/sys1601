@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">票号</Data></Cell>
+      <Cell><Data ss:Type="String">贴现类型</Data></Cell>
+      <Cell><Data ss:Type="String">票据类型</Data></Cell>
+      <Cell><Data ss:Type="String">批次号</Data></Cell>
+      <Cell><Data ss:Type="String">库存状态</Data></Cell> 
+      <Cell><Data ss:Type="String">票面金额</Data></Cell>
+      <Cell><Data ss:Type="String">转入日期</Data></Cell>
+      <Cell><Data ss:Type="String">出票日期</Data></Cell>
+      <Cell><Data ss:Type="String">票面到期日</Data></Cell>
+      <Cell><Data ss:Type="String">节假日加天</Data></Cell>
+      <Cell><Data ss:Type="String">异地加天</Data></Cell>
+      <Cell><Data ss:Type="String">计息天数</Data></Cell>
+      <Cell><Data ss:Type="String">起息日</Data></Cell>
+      <Cell><Data ss:Type="String">计息到期日</Data></Cell>
+      <Cell><Data ss:Type="String">转入利率</Data></Cell>
+      <Cell><Data ss:Type="String">转入利息</Data></Cell>
+      <Cell><Data ss:Type="String">实付金额</Data></Cell>
+      <Cell><Data ss:Type="String">客户名称</Data></Cell>
+      <Cell><Data ss:Type="String">出票人</Data></Cell>
+      <Cell><Data ss:Type="String">出票人开户行</Data></Cell>
+      <Cell><Data ss:Type="String">收款人</Data></Cell>
+      <Cell><Data ss:Type="String">收款人开户行</Data></Cell>
+      <Cell><Data ss:Type="String">承兑人</Data></Cell>
+      <Cell><Data ss:Type="String">承兑人开户行</Data></Cell>     
+      <Cell><Data ss:Type="String">客户经理</Data></Cell>
+      <Cell><Data ss:Type="String">档案编号</Data></Cell>     
+      <Cell><Data ss:Type="String">备注</Data></Cell>
+      <Cell><Data ss:Type="String">卖出批次号</Data></Cell>    
+      <Cell><Data ss:Type="String">转出贴现客户</Data></Cell>   
+      <Cell><Data ss:Type="String">转卖日期</Data></Cell> 
+      <Cell><Data ss:Type="String">转卖类型</Data></Cell>
+      <Cell><Data ss:Type="String">计息天数</Data></Cell>
+      <Cell><Data ss:Type="String">计息到期日</Data></Cell>
+      <Cell><Data ss:Type="String">转出利率</Data></Cell>
+      <Cell><Data ss:Type="String">转出利息</Data></Cell>
+      <Cell><Data ss:Type="String">实收金额</Data></Cell>
+      <Cell><Data ss:Type="String">转卖客户经理</Data></Cell> 
+      <Cell><Data ss:Type="String">转卖档案编号</Data></Cell>
+      </Row>
+    <% @pjmrs.each do |pjmr|%>
+      <Row>
+       <Cell><Data ss:Type="String"><%=pjmr.ph%></Data></Cell>
+      <Cell><Data ss:Type="String"><%=pjmr.txlx%></Data></Cell>
+      <Cell><Data ss:Type="String"><%=pjmr.pjlx%></Data></Cell>
+      <Cell><Data ss:Type="String"><%=pjmr.pch%></Data></Cell>
+      <Cell><Data ss:Type="String"><%=get_kcztdesc(pjmr.kczt)%></Data></Cell>
+      <Cell><Data ss:Type="Number"><%=number_to_currency(pjmr.pmje, unit:'')%></Data></Cell>
+      <Cell><Data ss:Type="String"><%=pjmr.zrrq%></Data></Cell>
+      <Cell><Data ss:Type="String"><%=pjmr.cprq%></Data></Cell>
+      <Cell><Data ss:Type="String"><%=pjmr.pmdqrq%></Data></Cell>
+      <Cell><Data ss:Type="Number"><%=pjmr.jjrjt%></Data></Cell>
+      <Cell><Data ss:Type="Number"><%=pjmr.ydjt%></Data></Cell>
+      <Cell><Data ss:Type="Number"><%=pjmr.jxts%></Data></Cell>
+      <Cell><Data ss:Type="String"><%=pjmr.qxrq%></Data></Cell>
+      <Cell><Data ss:Type="String"><%=pjmr.jxdqrq%></Data></Cell>
+      <Cell><Data ss:Type="Number"><%=pjmr.zrll%></Data></Cell>
+      <Cell><Data ss:Type="Number"><%=pjmr.zrlx%></Data></Cell>
+      <Cell><Data ss:Type="Number"><%=pjmr.sfje%></Data></Cell>
+      <Cell><Data ss:Type="String"><%=pjmr.khmc%></Data></Cell>
+      <Cell><Data ss:Type="String"><%=pjmr.cpr%></Data></Cell>
+      <Cell><Data ss:Type="String"><%=pjmr.cprkhh%></Data></Cell>
+      <Cell><Data ss:Type="String"><%=pjmr.skr%></Data></Cell>
+      <Cell><Data ss:Type="String"><%=pjmr.skrkhh%></Data></Cell>
+      <Cell><Data ss:Type="String"><%=pjmr.cdr%></Data></Cell>
+      <Cell><Data ss:Type="String"><%=pjmr.cdrkhh%></Data></Cell>
+      <Cell><Data ss:Type="String"><%=pjmr.khjlmc%></Data></Cell>
+      <Cell><Data ss:Type="String"><%=pjmr.dabh%></Data></Cell>     
+      <Cell><Data ss:Type="String"><%=pjmr.bz%></Data></Cell>
+      <Cell><Data ss:Type="String"><%=pjmr.pjmc.pch if pjmr.pjmc != nil %></Data></Cell>
+      <Cell><Data ss:Type="String"><%=pjmr.pjmc.khmc if pjmr.pjmc != nil %></Data></Cell>
+      <Cell><Data ss:Type="String"><%=pjmr.pjmc.zmrq if pjmr.pjmc != nil %></Data></Cell>
+      <Cell><Data ss:Type="Number"><%=pjmr.pjmc.txlx if pjmr.pjmc != nil %></Data></Cell>
+      <Cell><Data ss:Type="Number"><%=pjmr.pjmc.jxts if pjmr.pjmc != nil %></Data></Cell>
+      <Cell><Data ss:Type="String"><%=pjmr.pjmc.jxdqrq if pjmr.pjmc != nil %></Data></Cell>
+      <Cell><Data ss:Type="Number"><%=pjmr.pjmc.zcll if pjmr.pjmc != nil %></Data></Cell>
+      <Cell><Data ss:Type="Number"><%=pjmr.pjmc.zclx if pjmr.pjmc != nil %></Data></Cell>
+      <Cell><Data ss:Type="Number"><%=pjmr.pjmc.ssje if pjmr.pjmc != nil %></Data></Cell>
+      <Cell><Data ss:Type="String"><%=pjmr.pjmc.khjlmc if pjmr.pjmc != nil %></Data></Cell>
+      <Cell><Data ss:Type="String"><%=pjmr.pjmc.dabh if pjmr.pjmc != nil %></Data></Cell>
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

@@ -10,6 +10,11 @@ class PjmrsController < ApplicationController
 		
 		@pjmrs = Pjmr.where(wh).where("cpr like ? ","%#{params['fl_cpr']}%")
 			.order("updated_at desc").paginate(page: params[:page])
+
+		respond_to do |format|
+			format.html
+			format.xls
+		end 
 				
 	end
 
