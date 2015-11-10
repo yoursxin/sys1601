@@ -9,12 +9,17 @@ class PjmrsController < ApplicationController
 		wh["kczt"] = params["kczt_ids"] if params["kczt_ids"].present?	
 		
 		@pjmrs = Pjmr.where(wh).where("cpr like ? ","%#{params['fl_cpr']}%")
-			.order("updated_at desc").paginate(page: params[:page])
+			.order("updated_at desc")
 
-		respond_to do |format|
-			format.html
-			format.xls
-		end 
+		
+		if params[:commit] == "下载"
+	      response.headers['Content-Disposition'] = 'attachment; filename=pjmx.xls'
+		  render "index.xls.erb"
+		else 
+		  @pjmrs = @pjmrs.paginate(page: params[:page])
+		end
+
+		
 				
 	end
 

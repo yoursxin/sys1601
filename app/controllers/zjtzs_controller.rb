@@ -6,7 +6,15 @@ class ZjtzsController < ApplicationController
 	def index
 		wh = genFindCon(params)
 		wh["zt"] = params["zjzt_ids"] if params["zjzt_ids"].present?
-		@zjtzs = Zjtz.where(wh).order("updated_at desc").paginate(page: params[:page])		
+		@zjtzs = Zjtz.where(wh).order("updated_at desc")
+
+		if params["commit"] == "下载"
+		  response.headers['Content-Disposition'] = 'attachment; filename=zjtz.xls'
+		  render "index.xls.erb"
+		else 
+		  @zjtzs = @zjtzs.paginate(page: params[:page])
+		end	
+
 				
 	end
 	#入账申请

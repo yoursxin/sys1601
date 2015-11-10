@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+       <Cell><Data ss:Type="String">资金编号</Data></Cell>
+      <Cell><Data ss:Type="String">状态</Data></Cell>
+      <Cell><Data ss:Type="String">客户名称</Data></Cell>
+      <Cell><Data ss:Type="String">产品描述</Data></Cell>
+      <Cell><Data ss:Type="String">金额</Data></Cell>
+      <Cell><Data ss:Type="String">币种</Data></Cell> 
+      <Cell><Data ss:Type="String">起息日</Data></Cell>
+      <Cell><Data ss:Type="String">到期日</Data></Cell>
+      <Cell><Data ss:Type="String">利率</Data></Cell>
+      <Cell><Data ss:Type="String">计息天数</Data></Cell>
+      <Cell><Data ss:Type="String">利息</Data></Cell>
+      <Cell><Data ss:Type="String">本息合计金额</Data></Cell>
+      <Cell><Data ss:Type="String">客户经理</Data></Cell>
+      <Cell><Data ss:Type="String">备注</Data></Cell>
+      <Cell><Data ss:Type="String">档案编号</Data></Cell>
+      <Cell><Data ss:Type="String">结清编号</Data></Cell>
+      <Cell><Data ss:Type="String">实际起息日</Data></Cell>
+      <Cell><Data ss:Type="String">实际到期日</Data></Cell>
+      <Cell><Data ss:Type="String">实际利率</Data></Cell>
+      <Cell><Data ss:Type="String">实际天数</Data></Cell>
+      <Cell><Data ss:Type="String">实际利息</Data></Cell>
+      <Cell><Data ss:Type="String">实际本息合计金额</Data></Cell>   
+      </Row>
+    <% @zjtzs.each do |zjtz|%>
+      <Row>
+      <Cell><Data ss:Type="String"><%=zjtz.bh%></Data></Cell>
+       <Cell><Data ss:Type="String"><%=get_zjztdesc(zjtz.zt)%></Data></Cell>
+       <Cell><Data ss:Type="String"><%=zjtz.khmc%></Data></Cell>
+       <Cell><Data ss:Type="String"><%=zjtz.cpms%></Data></Cell>     
+      <Cell><Data ss:Type="Number"><%=number_to_currency(zjtz.je, unit: '')%></Data></Cell>
+       <Cell><Data ss:Type="String"><%=zjtz.biz%></Data></Cell>
+       <Cell><Data ss:Type="String"><%=zjtz.csqxrq%></Data></Cell>
+       <Cell><Data ss:Type="String"><%=zjtz.csdqrq%></Data></Cell>
+       <Cell><Data ss:Type="String"><%=zjtz.csll%></Data></Cell>
+       <Cell><Data ss:Type="String"><%=zjtz.csjxts%></Data></Cell>
+      <Cell><Data ss:Type="Number"><%=number_to_currency(zjtz.cslx, unit: '')%></Data></Cell>
+      <Cell><Data ss:Type="Number"><%=number_to_currency(zjtz.je + zjtz.cslx, unit: '')%></Data></Cell>
+       <Cell><Data ss:Type="String"><%=zjtz.khjlmc%></Data></Cell>
+       <Cell><Data ss:Type="String"><%=zjtz.bz%></Data></Cell>
+       <Cell><Data ss:Type="String"><%=zjtz.dabh%></Data></Cell>
+       <Cell><Data ss:Type="String"><%=zjtz.jqbh%></Data></Cell>
+       <Cell><Data ss:Type="String"><%=zjtz.qxrq%></Data></Cell>
+       <Cell><Data ss:Type="String"><%=zjtz.dqrq%></Data></Cell>
+       <Cell><Data ss:Type="String"><%=zjtz.ll%></Data></Cell>
+       <Cell><Data ss:Type="String"><%=zjtz.jxts%></Data></Cell>
+      <Cell><Data ss:Type="Number"><%=number_to_currency(zjtz.lx, unit: '')%></Data></Cell>
+      <Cell><Data ss:Type="Number"><%=number_to_currency(zjtz.je+zjtz.lx, unit: '')%></Data></Cell>
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>
