@@ -19,7 +19,7 @@ class PjmrsController < ApplicationController
 		  @pjmrs = @pjmrs.paginate(page: params[:page])
 		end
 
-		
+		#logger.debug(">>>>>  cookies[:_name]" + cookies[:_name].to_s)
 				
 	end
 
