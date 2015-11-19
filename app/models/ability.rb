@@ -3,7 +3,7 @@ class Ability
 
   def initialize(user)
     user ||= User.new # guest user
-    can :index, Pjmr
+    can [:index, :seltj], Pjmr
     can :index, Zjtz
     can [:show, :new, :edit, :update], User
     
