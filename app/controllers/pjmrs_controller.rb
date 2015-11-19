@@ -165,28 +165,31 @@ class PjmrsController < ApplicationController
 
 	#出库批量编辑
 	def ckpledit
-		if params[:pjmr_ids].blank?
+		if cookies[:selpjckids].blank?
 			flash[:warning] = "请选择要操作的记录"
 			redirect_to rkIndex_pjmrs_path
 		else
+		  ids = cookies[:selpjckids].split(",")
 		  if params[:cksq_btn]
-			@pjmrs = Pjmr.find(params[:pjmr_ids])
+			@pjmrs = Pjmr.find(ids)
 			
 		  elsif params[:cksqdel_btn]
-			Pjmr.plcksqdel params[:pjmr_ids], current_user.email
+			Pjmr.plcksqdel ids, current_user.email
 			flash[:sucess] = '出库申请删除成功'
 			redirect_to rkIndex_pjmrs_path
 		  end
+		  
 		end			
 	end
 
  	#出库批量申请
  	def ckplsq
- 		if params[:pjmr_ids].blank?
+ 		if cookies[:selpjckids].blank?
  			flash[:warning] = "未选择或选择的票据不存在" 			
  		else
+ 			ids = cookies[:selpjckids].split(",")
  			Pjmr.transaction do
- 				params[:pjmr_ids].each do |id|
+ 				ids.each do |id|
  					pjmr = Pjmr.find(id)
  					pjmr.kczt = '4'
  					pjmr.create_pjmc(pjmc_params)
@@ -195,7 +198,8 @@ class PjmrsController < ApplicationController
  					pjmr.pjmc.cksqsj=Time.now				
  					pjmr.save!  
  				end
- 			end 			
+ 			end
+ 			cookies.delete(:selpjckids) 			
  		end
  		redirect_to rkIndex_pjmrs_path
  	end
@@ -204,16 +208,18 @@ class PjmrsController < ApplicationController
 
  	#出库审核
  	def cksh
- 		if params[:pjmr_ids].blank?
+ 		if cookies[:selpjckids].blank?
 			flash[:warning] = "请选择要操作的记录"			
 		else
+ 		  ids = cookies[:selpjckids].split(",")
  		  if params[:cksh_btn]
- 			Pjmr.plcksh(params[:pjmr_ids],current_user.email)
+ 			Pjmr.plcksh(ids,current_user.email)
  			flash[:success] = "出库成功"
  		  elsif params[:cksqth_btn]
- 			Pjmr.plcksqth(params[:pjmr_ids],current_user.email)
+ 			Pjmr.plcksqth(ids,current_user.email)
  			flash[:success] = "出库申请退回成功"
  		  end
+ 		  cookies.delete(:selpjckids)
  		end
  		redirect_to ckdshIndex_pjmrs_path
  	end

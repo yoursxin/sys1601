@@ -1,10 +1,6 @@
 module SessionsHelper
   def sign_in(user)
     remember_token = User.new_remember_token
-<<<<<<< HEAD
-    #cookies.permanent[:remember_token] = remember_token
-=======
->>>>>>> bf8b4c3b5a170bd0b0a1af2237712c834fee7a31
     cookies[:remember_token] = remember_token
     user.update_attribute(:remember_token, User.encrypt(remember_token))
     self.current_user = user
