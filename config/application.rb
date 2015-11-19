@@ -34,7 +34,7 @@ module SampleApp
     config.active_record.default_timezone = :local
 
     
-    WillPaginate.per_page = 20
+    WillPaginate.per_page = 15
   end
 end
 

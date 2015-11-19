@@ -1,19 +1,87 @@
-<script src="/assets/js.cookie.js"></script>
-<script type="text/javascript">
-	$(function(){
-		$('#allcheckbox').change(function(){
-			if($('#allcheckbox').prop('checked')){
-				$('.ckpjmr').prop('checked',true);
-			}else{
-				$('.ckpjmr').prop('checked',false);
-			}			
-		});
-	});	
 
-	//Cookies.set('_name', 'hxx');
-	//alert(Cookies.get('_name'));
+<script type="text/javascript">
+
+
+//根据选择票据id，去后台查询统计信息
+function getSeltj(){
+	$.post('/pjmrs/seltj', {selpjckids: Cookies.get('selpjckids')}, function(data){ 
+    	$("#result").html(data);
+    },'text');
+}
+
+$(function(){
+
+	//全选框
+	$('#allcheckbox').change(function(){
+		if($('#allcheckbox').prop('checked')){
+			$('.ckpjmr').prop('checked',true);
+		}else{
+			$('.ckpjmr').prop('checked',false);
+		}
+
+		//为了避免多次触发change事件，只在首个触发即可change
+		$('.ckpjmr').filter(":first").trigger("change");		
+	});
+
+	//单选框，根据选择情况，修改cookie储存的id值
+	$(".ckpjmr").change(function(){ 
+		
+  		var storedSelidsSet = new Set();  	
+  		if(Cookies.get('selpjckids') ){
+  			
+  			//storedSelidsSet = new Set(Cookies.get('selpjckids').split(','));
+  			Cookies.get('selpjckids').split(',').forEach(function(val){
+  				storedSelidsSet.add(val);
+  			});  		
+  		} 
+  		$(".ckpjmr").each(function(){
+  			if(this.checked){
+  				storedSelidsSet.add(this.value)
+  			}else{
+  				storedSelidsSet.delete(this.value)
+  			}
+  		});  		
+  		
+  		var temstr = '';
+  		storedSelidsSet.forEach(function(val){  			
+  			if(temstr != ''){  				
+  				temstr = temstr+","+val;
+  			}else{
+  				temstr = val;
+  			}  			
+  		});  		
+
+  		//Cookies.set('selpjckids',Array.from(storedSelidsSet).join(','));  
+  		Cookies.set('selpjckids',temstr);  		
+  		getSeltj();  	
+  	});
+
+  	//如果当前url与原url不同，则清除保存的选择列表	
+	if(window.location.pathname != Cookies.get('previousPathname')){
+		Cookies.remove('selpjckids');
+	}
+
+	//储存原pathname
+	Cookies.set('previousPathname',window.location.pathname);
+
+  	//根据储存的信息，回复已选择
+ 	$(".ckpjmr").each(function(){    
+    	if(Cookies.get('selpjckids') ){
+  			var  storedSelidsArray = Cookies.get('selpjckids').split(',');  			
+  			if(storedSelidsArray.indexOf(this.value)>=0){  				
+  				this.checked=true;
+  			}else{  				
+  				this.checked=false;
+  			}
+  		}
+  	});
+  	getSeltj();
+});	
 
 </script>
+
+<div id='result' class="alert alert-success">
+</div>
 
 <table  class='table table-striped table-bordered table-hover table-condensed' style='width:3500px' >
 	<thead>

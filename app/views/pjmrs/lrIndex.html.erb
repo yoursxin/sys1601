@@ -1,3 +1,4 @@
+
 <h4>票据买入查询</h4>
 <%=form_tag lrIndex_pjmrs_path, method: :get, class: 'form-horizotal' do%>
 <%=render partial: 'pjmrFindCons'%>	
@@ -5,6 +6,7 @@
 
 <% end %>
 <hr>
+
 <%=form_tag rksq_pjmrs_path, method: :put do %>
 <%= will_paginate %>
 <%=render partial: 'pjmrList', object: @pjmrs%>

@@ -23,8 +23,24 @@ class PjmrsController < ApplicationController
 				
 	end
 
+	#根据选择的票据id，返回统计信息
+	def seltj		
+
+		ids = []
+		if  params[:selpjckids]
+			ids =  params[:selpjckids].split(",")
+		end		
+
+		sfje = Pjmr.where({"id" => ids}).sum(:sfje)
+		respond_to do |formate|
+			formate.js {render plain: "已选择票据数量："+ids.size.to_s+"，实付金额总计："+sfje.to_s+"元"}
+		end	
+		
+	end
+
+
 	#录入清单
-	def lrIndex		
+	def lrIndex	
 		wh=genFindCon params
 		wh['kczt'] = ["0","3"]  #录入状态
 		wh['lrr'] = current_user.email		
@@ -46,7 +62,7 @@ class PjmrsController < ApplicationController
 	end
 	
 	#入库审核
-	def rksh
+	def rksh_old
 	  if params[:pjmr_ids].blank?
 			flash[:warning] = "请选择要操作的记录"			
 	  else		
@@ -57,6 +73,24 @@ class PjmrsController < ApplicationController
 			Pjmr.plrksqth(params[:pjmr_ids], current_user.email)
 			flash[:success] = "入库申请退回成功"
 		end
+	  end	
+	  redirect_to rkdshIndex_pjmrs_url
+	end
+
+	def rksh
+	  #logger.debug("rksh cookies[:selpjckids]:"+cookies[:selpjckids])
+	  if cookies[:selpjckids].blank?
+			flash[:warning] = "请选择要操作的记录"			
+	  else
+	  	ids = cookies[:selpjckids].split(",")		
+		if params[:rksh_btn]
+			Pjmr.plrksh(ids, current_user.email)
+			flash[:success] = "入库成功"
+		elsif params[:rksqth_btn]	
+			Pjmr.plrksqth(ids, current_user.email)
+			flash[:success] = "入库申请退回成功"
+		end
+		cookies.delete(:selpjckids)	
 	  end	
 	  redirect_to rkdshIndex_pjmrs_url
 	end
@@ -77,7 +111,7 @@ class PjmrsController < ApplicationController
 	end
 
 	#入库申请
-	def rksq 
+	def rksq_old 
 		
 		if params[:pjmr_ids].blank?
 			flash[:warning] = "请选择要操作的记录"			
@@ -95,7 +129,32 @@ class PjmrsController < ApplicationController
 		logger.error "查找票据失败"+$!.to_s
 		flash[:warning] = "未选择或选择的票据不存在"
 		redirect_to lrIndex_pjmrs_url
-	end	
+	end
+
+	#入库申请
+	def rksq 
+		
+		#logger.debug("cookies[:selpjckids]:"+cookies[:selpjckids])
+
+		if cookies[:selpjckids].blank?
+			flash[:warning] = "请选择要操作的记录"			
+		else
+		  ids = cookies[:selpjckids].split(",")
+		  if params[:del_btn]			
+			Pjmr.pllrdel ids
+			flash[:success] ="删除成功"
+		  elsif params[:rksq_btn]
+			Pjmr.plrksq(ids, current_user.email)
+			flash[:success] = "入库申请成功"
+		  end
+		  cookies.delete(:selpjckids)		  
+		end
+		redirect_to lrIndex_pjmrs_url
+	rescue ActiveRecord::RecordNotFound
+		logger.error "查找票据失败"+$!.to_s
+		flash[:warning] = "未选择或选择的票据不存在"
+		redirect_to lrIndex_pjmrs_url
+	end		
 
 	def import
 		Pjmr.import(params[:file], current_user.email)
