@@ -4,13 +4,9 @@ class PjmrsController < ApplicationController
 	load_and_authorize_resource 
 	
 	def index		
-		wh=genFindCon params
-		#wh['lrr']=current_user.email
-		wh["kczt"] = params["kczt_ids"] if params["kczt_ids"].present?	
-		
-		@pjmrs = Pjmr.where(wh).where("cpr like ? ","%#{params['fl_cpr']}%")
-			.order("updated_at desc")
-
+		@pjmrs = genFindCon params
+		@pjmrs = @pjmrs.where({"kczt" =>  params["kczt_ids"]})	 if params["kczt_ids"].present?		
+		@pjmrs = @pjmrs.order("updated_at desc, id desc")
 		
 		if params[:commit] == "下载"
 	      response.headers['Content-Disposition'] = 'attachment; filename=pjmx.xls'
@@ -31,9 +27,9 @@ class PjmrsController < ApplicationController
 			ids =  params[:selpjckids].split(",")
 		end		
 
-		sfje = Pjmr.where({"id" => ids}).sum(:sfje)
+		sfje = Pjmr.where({"id" => ids}).sum(:pmje)
 		respond_to do |formate|
-			formate.js {render plain: "已选择票据数量："+ids.size.to_s+"，实付金额总计："+sfje.to_s+"元"}
+			formate.js {render plain: "已选择票据数量："+ids.size.to_s+" 笔，票面金额总计："+sfje.to_s+" 元"}
 		end	
 		
 	end
@@ -41,24 +37,27 @@ class PjmrsController < ApplicationController
 
 	#录入清单
 	def lrIndex	
-		wh=genFindCon params
-		wh['kczt'] = ["0","3"]  #录入状态
-		wh['lrr'] = current_user.email		
-		@pjmrs = Pjmr.where(wh).paginate(page: params[:page])
+		@pjmrs = genFindCon params
+		@pjmrs = @pjmrs.where('kczt' =>  ["0","3"], 'lrr' =>  current_user.email)
+		@pjmrs = @pjmrs.order("updated_at desc, id desc")	
+		@pjmrs = @pjmrs.paginate(page: params[:page])
 	end
 
 	#根据录入清单，进行入库申请
 	def rksqIndex		
-		wh=genFindCon params
-		wh['kczt'] = "0"  #录入状态		
-		@pjmrs = Pjmr.where(wh).paginate(page: params[:page])
+		@pjmrs = genFindCon params
+		@pjmrs = @pjmrs.where('kczt' => "0")
+		@pjmrs = @pjmrs.order("updated_at desc, id desc")	
+		@pjmrs = @pjmrs.paginate(page: params[:page])
+		
 	end
 
 	#入库待审核清单，进行入库
 	def rkdshIndex		
-		wh=genFindCon params
-		wh['kczt'] = "1"  #入库待审核		
-		@pjmrs = Pjmr.where(wh).paginate(page: params[:page])
+		@pjmrs = genFindCon params
+		@pjmrs = @pjmrs.where('kczt' => "1") #入库待审核		
+		@pjmrs = @pjmrs.order("updated_at desc, id desc")	
+		@pjmrs = @pjmrs.paginate(page: params[:page])
 	end
 	
 	#入库审核
@@ -98,16 +97,19 @@ class PjmrsController < ApplicationController
 
 	#入库清单，进行出库申请
 	def rkIndex		
-		wh=genFindCon params
-		wh['kczt'] = ["2","6"]  #入库	或 出库申请退回	
-		@pjmrs = Pjmr.where(wh).paginate(page: params[:page])
+		@pjmrs = genFindCon params
+		@pjmrs = @pjmrs.where('kczt' =>  ["2","6"])  #入库	或 出库申请退回	
+		@pjmrs = @pjmrs.order("updated_at desc, id desc")	
+		@pjmrs = @pjmrs.paginate(page: params[:page])
+
 	end
 
 	#出库待审核清单，进行出库
 	def ckdshIndex		
-		wh=genFindCon params
-		wh['kczt'] = "4"  #出库待审核		
-		@pjmrs = Pjmr.where(wh).paginate(page: params[:page])
+		@pjmrs = genFindCon params
+		@pjmrs = @pjmrs.where('kczt' =>  "4")  #出库待审核	
+		@pjmrs = @pjmrs.order("updated_at desc, id desc")	
+		@pjmrs = @pjmrs.paginate(page: params[:page])
 	end
 
 	#入库申请
@@ -236,8 +238,17 @@ class PjmrsController < ApplicationController
 			val = params[key]
 			wh[key[2,key.length-1]] = val if !val.blank? && key.index("f_")==0			
 		end
+		pjmrResult = Pjmr.where(wh)
+		pjmrResult = pjmrResult.where("cpr like ? ","%#{params['fl_cpr']}%") if params["fl_cpr"].present?
+		pjmrResult = pjmrResult.where("qxrq >= ? ", params["fr_lqxrq"]) if params["fr_lqxrq"].present?
+		pjmrResult = pjmrResult.where("qxrq <= ? ", params["fr_gqxrq"]) if params["fr_gqxrq"].present?
+		pjmrResult = pjmrResult.where("jxdqrq >= ? ", params["fr_ldqrq"]) if params["fr_ldqrq"].present?
+		pjmrResult = pjmrResult.where("jxdqrq <= ? ", params["fr_gdqrq"]) if params["fr_gdqrq"].present?
+		pjmrResult = pjmrResult.where("pmje >= ? ", params["fr_lpmje"]) if params["fr_lpmje"].present?
+		pjmrResult = pjmrResult.where("pmje <= ? ", params["fr_gpmje"]) if params["fr_gpmje"].present?
+
 		logger.debug "wh: "+wh.to_s
-		wh
+		pjmrResult
 	end 
 
 

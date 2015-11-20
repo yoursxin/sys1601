@@ -1,23 +1,31 @@
   <div class="control-group">
     
     <div class="controls">
-      <label class="control-label" for="f_ph">票　号：</label>
+      <label class="control-label" for="f_ph">票号　　：</label>
       <%=text_field_tag 'f_ph',params["f_ph"]%>
     </div>
     
     <div class="controls">
-      <label class="control-label" for="f_pch">批次号：</label>
+      <label class="control-label" for="f_pch">批次号　：</label>
       <%=text_field_tag 'f_pch',params["f_pch"]%>
     </div>
      
     <div class="controls">
-      <label class="control-label" for="fl_cpr">出票人：</label>
+      <label class="control-label" for="fl_cpr">出票人　：</label>
       <%=text_field_tag 'fl_cpr',params["fl_cpr"]%>
     </div>
      
     <div class="controls">
-      <label class="control-label" for="fr_lqxrql">起息日：</label>
-      <%=date_field_tag 'fr_lqxrql',params["fr_lqxrql"]%>--<%=date_field_tag 'fr_gqxrq',params["fr_gqxrq"]%>
+      <label class="control-label" for="fr_lqxrq">起息日　：</label>
+      <%=date_field_tag 'fr_lqxrq',params["fr_lqxrq"]%>--<%=date_field_tag 'fr_gqxrq',params["fr_gqxrq"]%>
+    </div>
+     <div class="controls">
+      <label class="control-label" for="fr_ldqxrq">到期日　：</label>
+      <%=date_field_tag 'fr_ldqxrq',params["fr_ldqxrq"]%>--<%=date_field_tag 'fr_gdqrq',params["fr_gdqrq"]%>
+    </div>
+     <div class="controls">
+      <label class="control-label" for="fr_lpmje">票面金额：</label>
+      <%=number_field_tag 'fr_lpmje',params["fr_lpmje"]%>--<%=number_field_tag 'fr_gpmje',params["fr_gpmje"]%>
     </div>
     
   </div>	
