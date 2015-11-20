@@ -19,29 +19,41 @@ $(function(){
 			$('.ckpjmr').prop('checked',false);
 		}
 
-		//为了避免多次触发change事件，只在首个触发即可change
+		//为了避免多次触发change事件，只在首条明细触发change
 		$('.ckpjmr').filter(":first").trigger("change");		
 	});
 
 	//单选框，根据选择情况，修改cookie储存的id值
 	$(".ckpjmr").change(function(){ 
 		
+  		//获取原储存信息
   		var storedSelidsSet = new Set();  	
-  		if(Cookies.get('selpjckids') ){
-  			
-  			//storedSelidsSet = new Set(Cookies.get('selpjckids').split(','));
+  		if(Cookies.get('selpjckids') ){	
   			Cookies.get('selpjckids').split(',').forEach(function(val){
   				storedSelidsSet.add(val);
   			});  		
-  		} 
-  		$(".ckpjmr").each(function(){
-  			if(this.checked){
-  				storedSelidsSet.add(this.value)
-  			}else{
-  				storedSelidsSet.delete(this.value)
-  			}
-  		});  		
+  		}   		
   		
+  		//根据当前页明细状态，更新原储存信息
+  		var selnum=0, allnum=0;
+  		$(".ckpjmr").each(function(){
+  			allnum++;
+  			if(this.checked){
+  				storedSelidsSet.add(this.value);
+  				selnum++;
+  			}else{
+  				storedSelidsSet.delete(this.value);
+  			}
+  		}); 
+
+  		//更新全选框状态		
+  		if(allnum>0 && (selnum == allnum)){
+  			$('#allcheckbox').prop('checked',true);
+  		}else{
+  			$('#allcheckbox').prop('checked',false);
+  		}
+  		
+  		//更新储存信息
   		var temstr = '';
   		storedSelidsSet.forEach(function(val){  			
   			if(temstr != ''){  				
@@ -52,8 +64,11 @@ $(function(){
   		});  		
 
   		//Cookies.set('selpjckids',Array.from(storedSelidsSet).join(','));  
-  		Cookies.set('selpjckids',temstr);  		
-  		getSeltj();  	
+  		Cookies.set('selpjckids',temstr); 
+
+  		//刷新统计信息 		
+  		getSeltj();
+
   	});
 
   	//如果当前url与原url不同，则清除保存的选择列表	
@@ -65,16 +80,26 @@ $(function(){
 	Cookies.set('previousPathname',window.location.pathname);
 
   	//根据储存的信息，回复已选择
- 	$(".ckpjmr").each(function(){    
+ 	var selnum=0, allnum=0;
+ 	$(".ckpjmr").each(function(){
+ 		allnum++;
     	if(Cookies.get('selpjckids') ){
   			var  storedSelidsArray = Cookies.get('selpjckids').split(',');  			
   			if(storedSelidsArray.indexOf(this.value)>=0){  				
   				this.checked=true;
+  				selnum++;
   			}else{  				
   				this.checked=false;
   			}
   		}
   	});
+
+  	//如果当期页每笔明细都是选中状态，则全选框更新为选中状态
+  	if(allnum>0 && (selnum == allnum)){
+  		$('#allcheckbox').prop('checked',true);
+  	}
+
+  	//刷新统计信息
   	getSeltj();
 });	
 
