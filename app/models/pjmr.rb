@@ -55,8 +55,12 @@ class Pjmr < ActiveRecord::Base
 	#批量入库审核
 	def self.plrksh( ids, usid)
 		Pjmr.transaction do
-			ids.each do |id|
+			ids.each do |id|				
 				pjmr = Pjmr.find(id)
+				
+				if '1' != pjmr.kczt 					
+					raise '非入库待审核状态不能进行入库申请:'+pjmr.ph
+				end
 				pjmr.kczt = '2'
 				pjmr.rkshr = usid
 				pjmr.rkshsj = Time.now

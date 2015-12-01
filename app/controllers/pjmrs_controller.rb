@@ -55,7 +55,8 @@ class PjmrsController < ApplicationController
 	#入库待审核清单，进行入库
 	def rkdshIndex		
 		@pjmrs = genFindCon params
-		@pjmrs = @pjmrs.where('kczt' => "1") #入库待审核		
+		#@pjmrs = @pjmrs.where('kczt' => "1") #入库待审核
+		@pjmrs = @pjmrs.where("kczt=? or (kczt=? and cast(rkshsj as date)=? ) ", "1", "2", Date.today.to_s)		
 		@pjmrs = @pjmrs.order("updated_at desc, id desc")	
 		@pjmrs = @pjmrs.paginate(page: params[:page])
 	end
@@ -189,6 +190,12 @@ class PjmrsController < ApplicationController
  		if cookies[:selpjckids].blank?
  			flash[:warning] = "未选择或选择的票据不存在" 			
  		else
+ 		  if params[:commit] == "下载"
+ 		  	ids = cookies[:selpjckids].split(",")
+ 		  	@pjmrs = Pjmr.find(ids)
+	        response.headers['Content-Disposition'] = 'attachment; filename=pjmcmx.xls'
+		    render "index.xls.erb"
+		  else 
  			ids = cookies[:selpjckids].split(",")
  			Pjmr.transaction do
  				ids.each do |id|
@@ -201,9 +208,10 @@ class PjmrsController < ApplicationController
  					pjmr.save!  
  				end
  			end
- 			cookies.delete(:selpjckids) 			
- 		end
- 		redirect_to rkIndex_pjmrs_path
+ 			cookies.delete(:selpjckids)
+ 			redirect_to rkIndex_pjmrs_path
+ 		  end 			
+ 		end 		
  	end
 
  	

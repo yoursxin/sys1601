@@ -1,0 +1,68 @@
+
+
+<table  class='table table-striped table-bordered table-hover table-condensed' style='width:2300px' >
+	<thead>
+	<tr>
+			<th>票号</th>
+			<th>贴现类型</th>
+			<th>票据类型</th>
+			<th>批次号</th>
+			<th>库存状态</th>	
+			<th>票面金额</th>
+			<th>转入日期</th>
+			<th>出票日期</th>
+			<th>票面到期日</th>
+			<th>节假日加天</th>
+			<th>异地加天</th>
+			<th>计息天数</th>
+			<th>起息日</th>
+			<th>计息到期日</th>
+			<th>转入利率</th>
+			<th>转入利息</th>
+			<th>实付金额</th>
+			<th>客户名称</th>
+			<th>出票人</th>
+			<th>出票人开户行</th>
+			<th>收款人</th>
+			<th>收款人开户行</th>
+			<th>承兑人</th>
+			<th>承兑人开户行</th>			
+			<th>客户经理</th>
+			<th>档案编号</th>			
+			<th>备注</th>
+			
+		</tr>
+	</thead>
+	<% @pjmrs.each do |pjmr|%>
+		<tr>			
+			<td><%=pjmr.ph%></td>
+			<td><%=pjmr.txlx%></td>
+			<td><%=pjmr.pjlx%></td>
+			<td><%=pjmr.pch%></td>
+			<td><%=get_kcztdesc(pjmr.kczt)%>
+			<td  align='right'><%=number_to_currency(pjmr.pmje, unit:'')%></td>
+			<td><%=pjmr.zrrq%></td>
+			<td><%=pjmr.cprq%></td>
+			<td><%=pjmr.pmdqrq%></td>
+			<td><%=pjmr.jjrjt%></td>
+			<td><%=pjmr.ydjt%></td>
+			<td><%=pjmr.jxts%></td>
+			<td><%=pjmr.qxrq%></td>
+			<td><%=pjmr.jxdqrq%></td>
+			<td><%=pjmr.zrll%></td>
+			<td><%=pjmr.zrlx%></td>
+			<td><%=pjmr.sfje%></td>
+			<td><%=pjmr.khmc%></td>
+			<td><%=pjmr.cpr%></td>
+			<td><%=pjmr.cprkhh%></td>
+			<td><%=pjmr.skr%></td>
+			<td><%=pjmr.skrkhh%></td>
+			<td><%=pjmr.cdr%></td>
+			<td><%=pjmr.cdrkhh%></td>
+			<td><%=pjmr.khjlmc%></td>
+			<td><%=pjmr.dabh%></td>			
+			<td><%=pjmr.bz%></td>
+			
+		</tr>
+	<% end %>
+</table>

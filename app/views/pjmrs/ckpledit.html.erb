@@ -1,16 +1,9 @@
-<h4>票据卖出信息</h4>
+<h4>票据卖出信息录入</h4>
 
 <div class="control-group">
 
 <%= form_for :pjmc, :url => ckplsq_pjmrs_path, :html => {:method => :put} do |f| %>
 
-	<div class="controls">
-	票号：
-	  <% @pjmrs.each do |pjmr| %>
-		<%=hidden_field_tag "pjmr_ids[]", pjmr.id %>
-		<%=pjmr.ph%>&nbsp;
-	  <% end %>
-	</div>
 	<div class="controls">
 	  <%=f.label :pch,"卖出批次号　：", class: "control-label" %>	  
 	  <%=f.text_field  :pch %>
@@ -45,15 +38,15 @@
 	</div>
 	<div class="controls">
 	  <%=f.label :zcll,"转出利率　　：" , class: "control-label"%>
-	  <%=f.number_field  :zcll %>
+	  <%=f.number_field  :zcll , :step => "any"%>
 	</div>
 	<div class="controls">
 	  <%=f.label :zclx,"转出利息　　：" , class: "control-label"%>
-	  <%=f.number_field  :zclx %>
+	  <%=f.number_field  :zclx , :step => "0.01"%>
 	</div>
 	<div class="controls">
 	  <%=f.label :ssje,"实收金额　　：" , class: "control-label"%>
-	  <%=f.number_field  :ssje %>
+	  <%=f.number_field  :ssje , :step => "0.01"%>
 	</div>
 	<div class="controls">
 	  <%=f.label :khjlmc,"转卖客户经理：" , class: "control-label"%>
@@ -65,5 +58,9 @@
 	</div>
 	
 	<%=f.submit "提交",  class: "btn  btn-default"%>
+	<%=f.submit "下载",  class: "btn  btn-default"%>
 <% end %>
 </div>
+<hr>
+<h4>已选择票据清单</h4>
+<%=render partial: 'pjmrSimpleList', object: @pjmrs %>
