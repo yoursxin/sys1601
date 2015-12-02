@@ -4,9 +4,9 @@ class ZjtzsController < ApplicationController
 	load_and_authorize_resource
 
 	def index
-		wh = genFindCon(params)
-		wh["zt"] = params["zjzt_ids"] if params["zjzt_ids"].present?
-		@zjtzs = Zjtz.where(wh).order("updated_at desc")
+		@zjtzs = genFindCon(params)
+		@zjtzs = @zjtzs.where({"zt" => params["zjzt_ids"]}) if params["zjzt_ids"].present?		
+		@zjtzs = @zjtzs.order("updated_at desc")
 
 		if params["commit"] == "下载"
 		  response.headers['Content-Disposition'] = 'attachment; filename=zjtz.xls'
@@ -42,28 +42,30 @@ class ZjtzsController < ApplicationController
 	rescue ActiveRecord::RecordNotFound
 		logger.error "查找记录败"+$!.to_s
 		flash[:warning] = "未选择或选择的记录不存在"
-		redirect_to lrIndex_zjtzs_path		
+		redirect_to lrIndex_zjtzs_path
+	rescue Zjtz::InvalidZtException
+    	logger.error $!.to_s
+		flash[:warning] =$!.to_s
+		redirect_to rjdshIndex_zjtzs_path		
 	end
 
 	def lrIndex
-		wh = genFindCon(params)
-		wh['zt'] = ["0","3"]  #录入状态
-		wh['lrr'] = current_user.email		
-		@zjtzs = Zjtz.where(wh).order("updated_at desc").paginate(page: params[:page])
+		@zjtzs = genFindCon(params)
+		@zjtzs = @zjtzs.where("zt" => ["0","3"], "lrr" => current_user.email)		
+		@zjtzs = @zjtzs.order("updated_at desc").paginate(page: params[:page])
 	end
 
 	#入账待审核清单，进行入账
 	def rjdshIndex		
-		wh=genFindCon params
-		wh['zt'] = "1"  #入账待审核		
-		@zjtzs = Zjtz.where(wh).paginate(page: params[:page])
+		@zjtzs=genFindCon params					
+		@zjtzs =@zjtzs.where("zt=? or (zt=? and cast(rjshsj as date)=? )", "1", "2", Date.today.to_s).paginate(page: params[:page])
 	end
 
 	#入账清单
 	def rjIndex		
-		wh=genFindCon params
-		wh['zt'] = ["2","6"]  #入账状态		
-		@zjtzs = Zjtz.where(wh).paginate(page: params[:page])
+		@zjtzs=genFindCon params
+		@zjtzs = @zjtzs.where("zt" =>  ["2","6"])		
+		@zjtzs = @zjtzs.paginate(page: params[:page])
 	end
 	
 	#入账审核
@@ -80,6 +82,10 @@ class ZjtzsController < ApplicationController
 		end	
 	  end
       redirect_to rjdshIndex_zjtzs_path
+    rescue Zjtz::InvalidZtException
+    	logger.error $!.to_s
+		flash[:warning] =$!.to_s
+		redirect_to rjdshIndex_zjtzs_path
 	end
 
 	def new 
@@ -93,10 +99,10 @@ class ZjtzsController < ApplicationController
 		@zjtz.lrr = current_user.email
 		@zjtz.lrsj = Time.now
 		if @zjtz.save!
-			flash[:sucess] = '添加成功'
+			flash[:success] = '添加成功'
 			redirect_to  lrIndex_zjtzs_path		
 		end
-		rescue ActiveRecord::RecordInvalid
+	rescue ActiveRecord::RecordInvalid
 			flash[:warning] = "添加失败,"+$!.to_s
 			render 'new'
 
@@ -117,12 +123,18 @@ class ZjtzsController < ApplicationController
 			@zjtz.dqrq =  (@zjtzs.presence) [0].csdqrq
 
 		elsif params[:cjsqdel_btn]
-			Zjtz.plcjsqdel params[:zjtz_ids], current_user.email
-			flash[:sucess] = '结清申请删除成功'
-			redirect_to rjIndex_zjtzs_path
-
+			begin
+				Zjtz.plcjsqdel params[:zjtz_ids], current_user.email
+				flash[:success] = '结清申请删除成功'
+				redirect_to rjIndex_zjtzs_path
+			rescue Zjtz::InvalidZtException
+    			logger.error $!.to_s
+				flash[:warning] =$!.to_s
+				redirect_to rjIndex_zjtzs_path
+			end	
 		end
-	  end			
+	  end
+
 	end
 
  	#出金批量申请
@@ -151,9 +163,9 @@ class ZjtzsController < ApplicationController
 
  	#出金待审核清单，进行出库
 	def cjdshIndex		
-		wh=genFindCon params
-		wh['zt'] = "4"  #出库待审核		
-		@zjtzs = Zjtz.where(wh).paginate(page: params[:page])
+		@zjtzs=genFindCon params		
+		@zjtzs = @zjtzs.where("zt=? or (zt=? and cast(cjshsj as date)=?) ", "4", "5", Date.today.to_s).order("zt, updated_at desc, id desc").paginate(page: params[:page])
+
 	end
 
 	#出金审核
@@ -170,6 +182,11 @@ class ZjtzsController < ApplicationController
  		end
  	  end
  	  redirect_to cjdshIndex_zjtzs_path
+ 	rescue Zjtz::InvalidZtException
+      logger.error $!.to_s
+	  flash[:warning] =$!.to_s
+	  redirect_to cjdshIndex_zjtzs_path
+
  	end
 	
  	private
@@ -186,8 +203,10 @@ class ZjtzsController < ApplicationController
 			val = params[key]
 			wh[key[2,key.length-1]] = val if !val.blank? && key.index("f_")==0			
 		end
+		zjtzResult = Zjtz.where(wh)
+		zjtzResult = zjtzResult.where("khmc like ? ","%#{params['fl_khmc']}%") if params["fl_khmc"].present?
 		logger.debug "wh: "+wh.to_s
-		wh
+		zjtzResult
 	end 
 
 

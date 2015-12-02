@@ -7,7 +7,8 @@ class Zjtz < ActiveRecord::Base
 	validates :cslx, numericality: {greater_than_or_equal_to: 0}, :allow_nil => true
 	validates :je, numericality: {greater_than_or_equal_to: 0}, :allow_nil => true
 	
-
+	class InvalidZtException  < RuntimeError
+	end 
 	
 	#批量入金申请
 	def self.plrjsq( ids, usid)
@@ -26,7 +27,7 @@ class Zjtz < ActiveRecord::Base
 	def self.pllrdel (ids)			
 		Zjtz.transaction do
 		  Zjtz.find(ids).each  do |zjtz|
-		  	  raise '只有录入或入金申请退回状态才能进行删除' if zjtz.zt !='0' && zjtz.zt !='3' 
+		  	  raise InvalidZtException, '只有录入或入金申请退回状态才能进行删除' if zjtz.zt !='0' && zjtz.zt !='3' 
 			  zjtz.destroy
 		  end
 		end	
@@ -37,6 +38,9 @@ class Zjtz < ActiveRecord::Base
 		Zjtz.transaction do
 			ids.each do |id|
 				zjtz = Zjtz.find(id)
+				if !(('1' == zjtz.zt) || ('2' == zjtz.zt && zjtz.rjshsj && Date.today.to_s == zjtz.rjshsj.to_s[0,10] ))
+					raise InvalidZtException, '该笔记录不是入账待审核或当日入账状态，不能进行退回：'+zjtz.bh
+				end
 				zjtz.zt = '3'
 				zjtz.rjshr = usid
 				zjtz.rjshsj = Time.now				
@@ -59,7 +63,7 @@ class Zjtz < ActiveRecord::Base
 		
 	end
 
-	#批量入金审核
+	#批量出金审核
 	def self.plcjsq( ids, usid)
 		Zjtz.transaction do
 			ids.each do |id|				
@@ -76,7 +80,7 @@ class Zjtz < ActiveRecord::Base
 	def self.plcjsqdel (ids, usid)
 		Zjtz.transaction do
 			Zjtz.find(ids).each do |zjtz|
-				raise "只有结清申请退回状态才能进行删除"  if zjtz.zt != '6' 
+				raise InvalidZtException, "只有结清申请退回状态才能进行删除"  if zjtz.zt != '6' 
 				zjtz.zt = '2'	
 				zjtz.cjsqr= usid
  				zjtz.cjsqsj=Time.now						
@@ -90,6 +94,9 @@ class Zjtz < ActiveRecord::Base
 		Zjtz.transaction do |id|
 			ids.each do |id|
 				zjtz = Zjtz.find(id)
+				if !(('4' == zjtz.zt) || ('5' == zjtz.zt && zjtz.cjshsj && Date.today.to_s == zjtz.cjshsj.to_s[0,10] ))
+					raise InvalidZtException, '该笔记录不是结清待审核或当日结清状态，不能进行退回：'+zjtz.bh
+				end
 				zjtz.zt = '6'
 				zjtz.cjshr = usid
 				zjtz.cjshsj = Time.now				

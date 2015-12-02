@@ -5,6 +5,10 @@ class Pjmr < ActiveRecord::Base
 	validates :pmje, numericality: {greater_than_or_equal_to: 0}	 
 	accepts_nested_attributes_for  :pjmc
 	
+	class InvalidZtException < RuntimeError
+	end
+	class InvalidFiletypeException < RuntimeError
+	end  
 
 
 	def self.import(file,usid)
@@ -35,7 +39,7 @@ class Pjmr < ActiveRecord::Base
 		case File.extname(file.original_filename)		
 		when '.xls' then Roo::Excel.new(file.path, :file_warning=>:ignore)
 		when '.xlsx' then Roo::Excelx.new(file.path, :file_warning=>:ignore)
-		else raise "未知的文件类型: #{file.original_filename}"
+		else raise InvalidFiletypeException, "错误，未知的文件类型: #{file.original_filename}"
 		end
 	end
 
@@ -56,16 +60,15 @@ class Pjmr < ActiveRecord::Base
 	def self.plrksh( ids, usid)
 		Pjmr.transaction do
 			ids.each do |id|				
-				pjmr = Pjmr.find(id)
-				
-				if '1' != pjmr.kczt 					
-					raise '非入库待审核状态不能进行入库申请:'+pjmr.ph
+				pjmr = Pjmr.find(id)				
+				if '1' == pjmr.kczt 					
+					pjmr.kczt = '2'
+					pjmr.rkshr = usid
+					pjmr.rkshsj = Time.now
+					pjmr.rkrq = Date.today
+					pjmr.save!
 				end
-				pjmr.kczt = '2'
-				pjmr.rkshr = usid
-				pjmr.rkshsj = Time.now
-				pjmr.rkrq = Date.today
-				pjmr.save!
+				
 			end
 		end
 	end
@@ -89,6 +92,9 @@ class Pjmr < ActiveRecord::Base
 		Pjmr.transaction do
 			ids.each do |id|
 				pjmr = Pjmr.find(id)
+				if !(('1' == pjmr.kczt) || ('2' == pjmr.kczt && pjmr.rkshsj && Date.today.to_s == pjmr.rkshsj.to_s[0,10] ))
+					raise  InvalidZtException, '该笔票据不是入库待审核或当日入库状态，不能进行退回：'+pjmr.ph
+				end
 				pjmr.kczt = '3'
 				pjmr.rkshr = usid
 				pjmr.rkshsj = Time.now
@@ -103,6 +109,12 @@ class Pjmr < ActiveRecord::Base
 		Pjmr.transaction do |id|
 			ids.each do |id|
 				pjmr = Pjmr.find(id)
+				
+				logger.debug " Date.today.to_s: "+ Date.today.to_s+"  pjmr.pjmc.ckshsj.to_s[0,10] : "+ pjmr.pjmc.ckshsj.to_s[0,10] 
+
+				if !(('4' == pjmr.kczt) || ('5' == pjmr.kczt && pjmr.pjmc && pjmr.pjmc.ckshsj && Date.today.to_s == pjmr.pjmc.ckshsj.to_s[0,10] ))
+					raise  InvalidZtException, '该笔票据不是出库待审核或当日出库状态，不能进行退回：'+pjmr.ph
+				end
 				pjmr.kczt = '6'
 				pjmr.pjmc.ckshr = usid
 				pjmr.pjmc.ckshsj = Time.now
@@ -116,7 +128,7 @@ class Pjmr < ActiveRecord::Base
 	def self.pllrdel (ids)			
 		Pjmr.transaction do
 		  Pjmr.find(ids).each  do |pjmr|
-		  	  raise '只有录入或入库申请退回状态才能进行删除' if pjmr.kczt !='0' && pjmr.kczt !='3' 
+		  	  raise InvalidZtException, '只有录入或入库申请退回状态才能进行删除' if pjmr.kczt !='0' && pjmr.kczt !='3' 
 			  pjmr.destroy
 		  end
 		end	
@@ -126,7 +138,7 @@ class Pjmr < ActiveRecord::Base
 	def self.plcksqdel (ids, usid)
 		Pjmr.transaction do
 			Pjmr.find(ids).each do |pjmr|
-				raise "只有出库申请退回状态才能进行删除"  if pjmr.kczt != '6' 
+				raise InvalidZtException, "只有出库申请退回状态才能进行删除"  if pjmr.kczt != '6' 
 				pjmr.kczt = '2'
 				pjmr.pjmc.destroy
 				pjmr.save!

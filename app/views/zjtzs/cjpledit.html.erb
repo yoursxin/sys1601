@@ -3,32 +3,33 @@
 <div class="control-group">
 <%= form_for @zjtz, :url => cjsq_zjtzs_path, :html => {:method => :put} do |f| %>
 
-	资金编号：
 	<% @zjtzs.each do |zjtz| %>
-		<%=hidden_field_tag "zjtz_ids[]", zjtz.id %>
-		<%=zjtz.bh%>&nbsp;
+		<%=hidden_field_tag "zjtz_ids[]", zjtz.id %>		
 	<% end %>
 	<div class="controls">
-      <%=f.label :qxrq,"实际起息日　：", class: "control-label" %><br/>
+      <%=f.label :qxrq,"实际起息日　：", class: "control-label" %>
       <%=f.date_field  :qxrq %>
     </div>
     <div class="controls">
-      <%=f.label :dqrq,"实际到期日　：", class: "control-label" %><br/>
+      <%=f.label :dqrq,"实际到期日　：", class: "control-label" %>
       <%=f.date_field  :dqrq %>
     </div>
     <div class="controls">
-      <%=f.label :ll,"实际利率　　：", class: "control-label" %><br/>
-      <%=f.number_field  :ll %>
+      <%=f.label :ll,"实际利率　　：", class: "control-label" %>
+      <%=f.number_field  :ll, :step => "any" %>
     </div>
     <div class="controls">
-      <%=f.label :jxts,"实际计息天数：", class: "control-label" %><br/>
+      <%=f.label :jxts,"实际计息天数：", class: "control-label" %>
       <%=f.number_field  :jxts %>
     </div>
     <div class="controls">
-      <%=f.label :lx,"实际利息　　：", class: "control-label" %><br/>
-      <%=f.number_field  :lx %>
+      <%=f.label :lx,"实际利息　　：", class: "control-label" %>
+      <%=f.number_field  :lx , :step => "0.01" %>
     </div>
 	
 	<%=f.submit "提交",  class: "btn  btn-default"%>
 <% end %>
 </div>
+<hr>
+<h4>已选择资金清单</h4>
+<%=render partial: 'zjtzSimpleList', object: @zjtzs %>

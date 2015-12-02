@@ -1,0 +1,42 @@
+<table class='table table-striped table-bordered table-hover table-condensed' style='width:1200px'>
+	<thead>
+	<tr>	
+			<th>资金编号</th>
+			<th>状态</th>
+			<th>客户名称</th>
+			<th>产品描述</th>
+			<th>金额</th>
+			<th>币种</th>	
+			<th>起息日</th>
+			<th>到期日</th>
+			<th>利率</th>
+			<th>计息天数</th>
+			<th>利息</th>
+			<th>本息合计金额</th>
+			<th>客户经理</th>
+			<th>备注</th>
+			<th>档案编号</th>
+				
+		</tr>
+	</thead>
+	<% @zjtzs.each do |zjtz|%>
+		<tr>			
+			<td><%=zjtz.bh%></td>
+			<td><%=get_zjztdesc(zjtz.zt)%></td>
+			<td><%=zjtz.khmc%></td>
+			<td><%=zjtz.cpms%></td>			
+			<td align='right'><%=number_to_currency(zjtz.je, unit: '')%></td>
+			<td><%=zjtz.biz%></td>
+			<td><%=zjtz.csqxrq%></td>
+			<td><%=zjtz.csdqrq%></td>
+			<td><%=zjtz.csll%></td>
+			<td><%=zjtz.csjxts%></td>
+			<td align='right'><%=number_to_currency(zjtz.cslx, unit: '')%></td>
+			<td align='right'><%=number_to_currency(zjtz.je + zjtz.cslx, unit: '')%></td>
+			<td><%=zjtz.khjlmc%></td>
+			<td><%=zjtz.bz%></td>
+			<td><%=zjtz.dabh%></td>
+			
+		</tr>
+	<% end %>
+</table>

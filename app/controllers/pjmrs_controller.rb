@@ -57,7 +57,7 @@ class PjmrsController < ApplicationController
 		@pjmrs = genFindCon params
 		#@pjmrs = @pjmrs.where('kczt' => "1") #入库待审核
 		@pjmrs = @pjmrs.where("kczt=? or (kczt=? and cast(rkshsj as date)=? ) ", "1", "2", Date.today.to_s)		
-		@pjmrs = @pjmrs.order("updated_at desc, id desc")	
+		@pjmrs = @pjmrs.order("kczt, updated_at desc, id desc")	
 		@pjmrs = @pjmrs.paginate(page: params[:page])
 	end
 	
@@ -86,13 +86,18 @@ class PjmrsController < ApplicationController
 		if params[:rksh_btn]
 			Pjmr.plrksh(ids, current_user.email)
 			flash[:success] = "入库成功"
-		elsif params[:rksqth_btn]	
+		elsif params[:rksqth_btn]				
 			Pjmr.plrksqth(ids, current_user.email)
 			flash[:success] = "入库申请退回成功"
 		end
 		cookies.delete(:selpjckids)	
 	  end	
 	  redirect_to rkdshIndex_pjmrs_url
+	rescue Pjmr::InvalidZtException
+		logger.error $!.to_s
+		flash[:warning] =  $!.to_s
+		redirect_to rkdshIndex_pjmrs_url
+
 	end
 
 
@@ -103,14 +108,16 @@ class PjmrsController < ApplicationController
 		@pjmrs = @pjmrs.order("updated_at desc, id desc")	
 		@pjmrs = @pjmrs.paginate(page: params[:page])
 
+
 	end
 
 	#出库待审核清单，进行出库
 	def ckdshIndex		
 		@pjmrs = genFindCon params
-		@pjmrs = @pjmrs.where('kczt' =>  "4")  #出库待审核	
-		@pjmrs = @pjmrs.order("updated_at desc, id desc")	
-		@pjmrs = @pjmrs.paginate(page: params[:page])
+		#@pjmrs = @pjmrs.where('kczt' =>  "4")  #出库待审核	
+		@pjmrs = @pjmrs.joins('left join pjmcs on (pjmcs.pjmr_id=pjmrs.id) ').where('kczt=? or (kczt=? and cast(pjmcs.ckshsj as date)=?) ', '4', '5', Date.today.to_s)
+		@pjmrs = @pjmrs.order("pjmrs.kczt, pjmrs.updated_at desc, pjmrs.id desc")	
+		@pjmrs = @pjmrs.paginate(page: params[:page])	
 	end
 
 	#入库申请
@@ -157,11 +164,24 @@ class PjmrsController < ApplicationController
 		logger.error "查找票据失败"+$!.to_s
 		flash[:warning] = "未选择或选择的票据不存在"
 		redirect_to lrIndex_pjmrs_url
+	rescue Pjmr::InvalidZtException
+		logger.error $!.to_s
+		flash[:warning] =$!.to_s
+		redirect_to lrIndex_pjmrs_url
 	end		
 
 	def import
 		Pjmr.import(params[:file], current_user.email)
 		redirect_to lrIndex_pjmrs_url, notice: "导入成功"
+	rescue Pjmr::InvalidFiletypeException
+		logger.error $!.to_s
+		flash[:warning] =$!.to_s
+		redirect_to lrIndex_pjmrs_url
+	rescue ActiveRecord::RecordNotUnique
+		logger.error $!.to_s
+		flash[:warning] ="违反唯一记录条件"
+		redirect_to lrIndex_pjmrs_url
+
 	end 
 
 	
@@ -180,9 +200,12 @@ class PjmrsController < ApplicationController
 			Pjmr.plcksqdel ids, current_user.email
 			flash[:sucess] = '出库申请删除成功'
 			redirect_to rkIndex_pjmrs_path
-		  end
-		  
-		end			
+		  end		  
+		end	
+	rescue Pjmr::InvalidZtException
+		logger.error $!.to_s
+		flash[:warning] =$!.to_s
+		redirect_to rkIndex_pjmrs_path		
 	end
 
  	#出库批量申请
@@ -232,6 +255,10 @@ class PjmrsController < ApplicationController
  		  cookies.delete(:selpjckids)
  		end
  		redirect_to ckdshIndex_pjmrs_path
+ 	rescue Pjmr::InvalidZtException
+		logger.error $!.to_s
+		flash[:warning] =$!.to_s
+		redirect_to ckdshIndex_pjmrs_path
  	end
 
  	private
