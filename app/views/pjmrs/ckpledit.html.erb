@@ -62,5 +62,5 @@
 <% end %>
 </div>
 <hr>
-<h4>已选择票据清单</h4>
+<h4>已选择票据清单共 <%=@count%> 笔，实付金额共计 <%=number_to_currency(@sumsfje,unit: '')%> 元，票面金额共计 <%=number_to_currency(@sumpmje,unit: '')%> 元</h4>
 <%=render partial: 'pjmrSimpleList', object: @pjmrs %>

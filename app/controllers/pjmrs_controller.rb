@@ -194,7 +194,16 @@ class PjmrsController < ApplicationController
 		else
 		  ids = cookies[:selpjckids].split(",")
 		  if params[:cksq_btn]
-			@pjmrs = Pjmr.find(ids)
+			@pjmrs = Pjmr.find(ids)			
+			@sumsfje = 0.0
+			@sumpmje = 0.0
+			@count =  0
+
+			@pjmrs.each  do |pjmr| 				
+				@sumsfje += pjmr.sfje == nil ? 0 : pjmr.sfje
+				@sumpmje += pjmr.pmje == nil ? 0 : pjmr.pmje
+				@count += 1
+			end
 			
 		  elsif params[:cksqdel_btn]
 			Pjmr.plcksqdel ids, current_user.email
